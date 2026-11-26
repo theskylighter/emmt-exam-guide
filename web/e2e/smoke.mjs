@@ -303,6 +303,13 @@ async function desktop(browser) {
     return (text.match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2705}\u{274C}]/gu) || []).join("");
   });
   check("design: no emoji in the interface chrome", emoji === "", emoji);
+  if (data.site.repoUrl) {
+    const repo = page.locator(".topbar-actions a.github-link");
+    const attrs = (await repo.count()) ? await repo.evaluate((a) => ({ href: a.getAttribute("href"), target: a.target, rel: a.rel, label: a.getAttribute("aria-label"), last: a === a.parentElement.lastElementChild })) : null;
+    check("topbar: GitHub icon links to site.repoUrl in a new tab, last action", !!attrs && attrs.href === data.site.repoUrl && attrs.target === "_blank" && attrs.rel.includes("noopener") && !!attrs.label && attrs.last, JSON.stringify(attrs));
+  } else {
+    check("topbar: no GitHub button without site.repoUrl", (await page.locator("a.github-link").count()) === 0);
+  }
   check("console: no errors on desktop", errors.length === 0, errors.slice(0, 2).join(" | "));
 }
 
@@ -348,6 +355,10 @@ async function phone(browser) {
   const searchBtn = page.locator("button.search-btn");
   const sb = await searchBtn.boundingBox();
   check("phone: search button visible and >= 40px", !!sb && sb.width >= 40 && sb.height >= 40 && sb.x + sb.width <= vw, JSON.stringify(sb));
+  if (data.site.repoUrl) {
+    const rb = await page.locator("a.github-link").boundingBox();
+    check("phone: GitHub button visible, inside the screen, >= 40px", !!rb && rb.width >= 40 && rb.height >= 40 && rb.x >= 0 && rb.x + rb.width <= vw, JSON.stringify(rb));
+  }
   await searchBtn.tap();
   await page.fill(".search-input", rich.title.split(/\s+/)[0]);
   await page.locator(".search-hit").first().waitFor({ timeout: 8000 });

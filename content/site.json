@@ -2,5 +2,6 @@
   "title": "EMMT Endsem Study Guide",
   "brand": "EMMT Endsem",
   "storagePrefix": "emmt-exam-guide",
-  "description": "Magnetic materials and semiconductor devices, told as a story, with the exact textbook figures."
+  "description": "Magnetic materials and semiconductor devices, told as a story, with the exact textbook figures.",
+  "repoUrl": "https://github.com/theskylighter/emmt-exam-guide"
 }

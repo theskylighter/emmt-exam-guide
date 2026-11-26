@@ -5,6 +5,7 @@ export interface SiteInfo {
   brand: string;        // short name shown in the top bar
   storagePrefix: string; // namespace for localStorage keys
   description?: string;
+  repoUrl?: string;      // GitHub repository; when set, a "GitHub" button appears in the top bar
 }
 
 export interface TocEntry {
