@@ -17,6 +17,28 @@ A dance where everyone holds hands in fours. Invite a few guests with five hands
 
 ## How It Works
 
+### n-type: a donor brings a spare electron
+
+In (a) the phosphorus atom (5+) uses four of its electrons in bonds; the fifth (the dashed orbit) is only loosely held. A little thermal energy frees it (b), and in a field it drifts as a conduction electron (c). The P atom left behind is a fixed **positive ion**.
+
+<<SVG:callister_fig12_11>>
+
+The same story in the band picture: the donor level sits just **below the conduction band**, so the jump is tiny compared with the full gap $E_g$.
+
+<<SVG:callister_fig12_12>>
+
+### p-type: an acceptor leaves a hole
+
+Boron (3+) has only three bonding electrons, so one bond is short an electron: a **hole** (a). A neighbouring electron hops into it, so the hole moves the other way (b), acting like a positive carrier.
+
+<<SVG:callister_fig12_13>>
+
+In the band picture the acceptor level sits just **above the valence band**. An electron jumps up into it and leaves a hole behind in the valence band.
+
+<<SVG:callister_fig12_14>>
+
+### Side by side
+
 | | n-type | p-type |
 |---|---|---|
 | Dopant | P, As, Sb (group V) | B, Al, Ga (group III) |
@@ -28,8 +50,12 @@ A dance where everyone holds hands in fours. Invite a few guests with five hands
 
 ### Three temperature regions of doped silicon
 
+The plot is for silicon doped with $10^{21}$ m⁻³ of phosphorus; the dashed curve is intrinsic silicon for comparison.
+
+<<SVG:callister_fig12_16>>
+
 1. **Freeze-out** (below about 100 K): too cold to free the dopant carriers.
-2. **Extrinsic** (about 100-475 K): every dopant is ionised and **n is approximately $N_d$**, flat with temperature. This is the **useful operating range**.
+2. **Extrinsic** (about 150-475 K): every dopant is ionised and **n is approximately $N_d$**, flat with temperature. This is the **useful operating range**.
 3. **Intrinsic** (above about 475 K): thermally created electron-hole pairs swamp the dopant. This is why chips fail when they overheat.
 
 :::note
@@ -63,7 +89,7 @@ Arsenic is group V, a donor, so the silicon is **n-type** with **electrons** as 
 :::
 :::
 
-:::q Q2 · Why is doped silicon's conductivity nearly constant between about 100 K and 475 K?
+:::q Q2 · Why is doped silicon's conductivity nearly constant between about 150 K and 475 K?
 :::ans
 In that **extrinsic** region every dopant atom is already ionised, so the carrier count equals the dopant count, and intrinsic carriers are still too few to matter.
 :::

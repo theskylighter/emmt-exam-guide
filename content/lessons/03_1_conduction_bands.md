@@ -13,7 +13,7 @@ $$\sigma = n|e|\mu_e + p|e|\mu_h \qquad \rho = \frac{1}{\sigma}$$
 - **n, p**: number of free electrons and holes per m3.
 - **$\mu_e$, $\mu_h$**: mobilities, how easily each moves in a field.
 
-In metals n is huge and fixed, and resistivity rises with temperature, impurities and deformation (**Matthiessen's rule**: $\rho_{total}$ = rho_thermal + rho_impurity + rho_deformation).
+In metals n is huge and fixed, and resistivity rises with temperature, impurities and deformation (**Matthiessen's rule**: $\rho_{total} = \rho_t + \rho_i + \rho_d$: thermal + impurity + deformation).
 
 ### Bands
 
@@ -28,6 +28,10 @@ A two-storey car park. The ground floor (VB) is completely full, so no car can m
 :::
 
 ## How It Works
+
+The four possible band pictures at 0 K. Metals are (a) and (b): there are empty states right next to the filled ones, so electrons can move with almost no energy. Insulators (c) and semiconductors (d) look the same, a full valence band, a gap and an empty conduction band; **only the width of the gap differs**.
+
+<<SVG:callister_fig12_4>>
 
 | Class | Gap | Behaviour |
 |---|---|---|

@@ -18,6 +18,10 @@ Cars driving down a road in a strong crosswind drift to one side. Red cars and b
 
 ## How It Works
 
+Read the figure in order. (a) Current $I_x$ flows along the bar and the field $B_z$ points up; the Lorentz force $F(-y)$ bends each electron toward the back face. (b) Electrons pile up on the back face and leave the front face positive. The resulting field pushes back with $F(+y)$ until the two forces balance, and the voltmeter reads $V_H$. (c) In a p-type sample the holes are pushed to the **same** back face, so the charges, and the sign of $V_H$, are reversed.
+
+<<SVG:callister_fig12_19>>
+
 $$V_H = \frac{R_H I_x B_z}{d} \qquad (d = \text{sample thickness})$$
 
 $$R_H = -\frac{1}{n|e|}\ \ (\text{electrons, n-type}) \qquad R_H = +\frac{1}{p|e|}\ \ (\text{holes, p-type})$$

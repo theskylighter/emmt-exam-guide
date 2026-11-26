@@ -14,6 +14,10 @@ Rush-hour commuters packed between two doors. Nobody can leave (no current), but
 
 ## How It Works
 
+How a dielectric lets the plates hold more charge. (a) With vacuum the plates carry $\pm Q_0$. (b) In the material, dipoles exist but point every which way. (c) The field lines them up: inside, the charges cancel, but a layer of net charge $-\Delta Q$ appears next to the positive plate and $+\Delta Q$ next to the negative one. The battery tops each plate up by $\Delta Q$, so the charge rises from $Q_0$ to $Q_0 + \Delta Q$ at the same voltage. The polarization is $P = \Delta Q / A$.
+
+<<SVG:callister_fig12_30>>
+
 | Relation | Meaning |
 |---|---|
 | $C_0 = \dfrac{\varepsilon_0 A}{l}$ | capacitance with vacuum |
@@ -23,6 +27,8 @@ Rush-hour commuters packed between two doors. Nobody can leave (no current), but
 | $\varepsilon_0 = 8.85 \times 10^{-12}\ \text{F/m}$ | permittivity of free space |
 
 ### Three types of polarization
+
+<<SVG:callister_fig12_31>>
 
 | Type | What shifts | Works up to about |
 |---|---|---|

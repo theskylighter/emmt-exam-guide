@@ -26,6 +26,10 @@ Rock-candy making, done very slowly and carefully. Dip a tiny seed crystal into 
 4. Atoms freeze onto the seed in the **same crystal orientation**, growing a large cylindrical single-crystal **ingot**.
 5. Slice the ingot into **wafers**.
 
+A real crystal puller (from the class slides) has four subsystems: the **furnace** (crucible, susceptor, heater, insulation), the **pulling mechanism** (seed shaft, chuck, rotation and lift), **ambient control** (argon inlet, exhaust, vacuum pump) and the **control system** (diameter and temperature sensors). Find each part in the figure; this is the diagram to draw in the exam.
+
+<<SVG:si_crystal_puller>>
+
 ### Segregation: why freezing purifies
 
 $$k_0 = \frac{C_s}{C_l} \qquad \left(\frac{\text{concentration in solid}}{\text{concentration in liquid}}\right)$$
