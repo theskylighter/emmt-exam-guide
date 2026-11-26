@@ -69,7 +69,7 @@ Figure 20-10(b) is a story of its own: magnet strength grew roughly **twentyfold
 | Electrical resistivity | high preferred (low eddy loss) | not critical |
 | $(BH)_{max}$ | small | **large** |
 | Domain walls | move **freely** (few defects, large grains) | **pinned** (fine particles, precipitates) |
-| Examples | pure iron, **Fe-3% Si** (grain-oriented), **permalloy** (Fe-Ni), **Metglas** (amorphous), **MnZn/NiZn ferrites** | **Alnico**, **Ba ferrite** (BaFe12O19), **Sm-Co**, **Nd2Fe14B**, Co steel |
+| Examples | pure iron, **Fe-3% Si** (grain-oriented), **permalloy** (Fe-Ni), **Metglas** (amorphous), **MnZn/NiZn ferrites** | **Alnico**, **Ba ferrite** (BaFe₁₂O₁₉), **Sm-Co**, **Nd₂Fe₁₄B**, Co steel |
 | Applications | transformer, motor and generator cores, electromagnets, inductors, relays | permanent magnets in motors, generators, loudspeakers, meters, separators |
 
 :::key

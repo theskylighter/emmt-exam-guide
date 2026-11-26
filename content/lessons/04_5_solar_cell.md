@@ -36,7 +36,7 @@ The depletion region is a permanent slope. Light keeps dropping marbles of two c
 | Layer (top to bottom) | What it is | Why it is there |
 |---|---|---|
 | **Front metal grid** | thin metal fingers and busbars; the **negative** terminal | collects electrons while leaving most of the surface open to light |
-| **Anti-reflection coating** | thin transparent film (Si3N4 or SiO2), often on a textured surface | bare silicon reflects about a third of the light; the coating cuts this to a few percent |
+| **Anti-reflection coating** | thin transparent film (Si₃N₄ or SiO₂), often on a textured surface | bare silicon reflects about a third of the light; the coating cuts this to a few percent |
 | **n+ emitter** | very thin (about 0.3-1 um), heavily doped n-type | light must pass through it to reach the junction |
 | **p-n junction (depletion region)** | built-in field E pointing from n to p | **separates** the pairs: the engine of the cell |
 | **p-type base** | thick (about 150-200 um), lightly doped | absorbs most of the light and generates most pairs |

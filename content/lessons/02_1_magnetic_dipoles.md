@@ -2,7 +2,7 @@
 
 ## The Problem: Where Is the Moving Charge?
 
-People knew **lodestone** (magnetite, Fe3O4) attracts iron for over 2,000 years, and sailors steered by magnetised needles from about the 11th century. In **1600**, William Gilbert's *De Magnete* showed that the **Earth itself is a giant magnet**. In **1820**, Hans Christian Oersted saw a compass needle twitch beside a wire carrying current: **moving charge makes magnetism**.
+People knew **lodestone** (magnetite, Fe₃O₄) attracts iron for over 2,000 years, and sailors steered by magnetised needles from about the 11th century. In **1600**, William Gilbert's *De Magnete* showed that the **Earth itself is a giant magnet**. In **1820**, Hans Christian Oersted saw a compass needle twitch beside a wire carrying current: **moving charge makes magnetism**.
 
 That left a puzzle:
 

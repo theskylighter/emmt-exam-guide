@@ -20,7 +20,7 @@ The **Bohr magneton** is the magnetic moment of a single electron spin, $\mu_B$ 
 |---|---|---|
 | Neighbouring moments | antiparallel, **equal** | antiparallel, **unequal** |
 | Net magnetization | zero | non-zero, large |
-| Examples | MnO, NiO, Cr | ferrites (Fe3O4, NiZn, MnZn) |
+| Examples | MnO, NiO, Cr | ferrites (Fe₃O₄, NiZn, MnZn) |
 :::
 :::
 
@@ -39,7 +39,7 @@ Narrow boundaries (about 100 nm) between magnetic domains, across which the mome
 ## B. MCQ
 
 :::q B1 · Which material has a negative susceptibility?
-(a) Fe (b) Al (c) Cu (d) Fe3O4
+(a) Fe (b) Al (c) Cu (d) Fe₃O₄
 :::ans
 **(c) Cu**, a diamagnetic material.
 :::

@@ -23,7 +23,7 @@ The answers give five behaviours.
 | **Paramagnetic** | unpaired electrons give moments that **align with** the field, but neighbours **do not interact**; alignment is lost when the field is removed | small, positive ($10^{-6}$ to $10^{-4}$) | Al, Ti, alloys of Cu |
 | **Ferromagnetic** | unpaired 3d spins and the **exchange interaction** align neighbours **parallel**; large magnetization even in small fields | very large, up to **$10^{6}$** | Fe, Ni, Co, Gd |
 | **Antiferromagnetic** | neighbouring moments line up **opposite and equal**, so they cancel | small, positive | Mn, Cr, MnO, NiO, CoO |
-| **Ferrimagnetic** | two kinds of ions point **opposite but unequal**, leaving a net moment | large | ferrites such as Fe3O4, NiZn and MnZn ferrites |
+| **Ferrimagnetic** | two kinds of ions point **opposite but unequal**, leaving a net moment | large | ferrites such as Fe₃O₄, NiZn and MnZn ferrites |
 
 <<SVG:askeland_fig20_4:compact>>
 
@@ -31,7 +31,7 @@ Figure 20-4 shows antiferromagnetic **MnO**: the Mn ions in alternate (111) plan
 
 ### Why ferrites matter
 
-Ferrimagnetic ferrites are **ceramics**, so they are good **electrical insulators**. That keeps **eddy-current losses** tiny, which makes them the best choice for **high-frequency** transformers and inductors. Their crystal structure is the **spinel**, AB2O4 (see [Quantum Numbers and Spin](01_1_quantum_numbers_spin.html)).
+Ferrimagnetic ferrites are **ceramics**, so they are good **electrical insulators**. That keeps **eddy-current losses** tiny, which makes them the best choice for **high-frequency** transformers and inductors. Their crystal structure is the **spinel**, AB₂O₄ (see [Quantum Numbers and Spin](01_1_quantum_numbers_spin.html)).
 
 ### Above the Curie temperature
 
@@ -39,7 +39,7 @@ Ferromagnetic and ferrimagnetic materials become **paramagnetic** above their Cu
 
 ### Superparamagnetism (a bonus)
 
-If ferromagnetic grains are made extremely small (Fe3O4 particles of 3-5 nm), thermal energy flips each particle's moment at random and the material behaves as **paramagnetic**. Such particles make **ferrofluids** ("liquid magnets") used as seals in hard drives and as coolants in loudspeakers.
+If ferromagnetic grains are made extremely small (Fe₃O₄ particles of 3-5 nm), thermal energy flips each particle's moment at random and the material behaves as **paramagnetic**. Such particles make **ferrofluids** ("liquid magnets") used as seals in hard drives and as coolants in loudspeakers.
 
 :::analogy
 A classroom told to face the front. **Diamagnetic** students stubbornly lean slightly backwards. **Paramagnetic** students turn to face the front but drift back once the teacher leaves. **Ferromagnetic** students all face the front together and keep doing it. **Antiferromagnetic** students sit in pairs facing opposite ways. **Ferrimagnetic** students also sit in opposite-facing pairs, but one of each pair is bigger, so the class still leans one way.

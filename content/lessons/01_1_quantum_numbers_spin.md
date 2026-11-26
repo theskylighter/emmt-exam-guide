@@ -46,7 +46,7 @@ Manganese has **5** unpaired spins but is **antiferromagnetic**. Only in Fe, Co 
 
 ### Crystal-structure link: spinels and ferrites
 
-Ferrites, the ceramic magnets in high-frequency transformers, have the **spinel structure AB2O4** (midsem, Raghavan). In an **inverse spinel** such as Fe3O4, ions on the two kinds of site point their moments **opposite but unequally**, giving **ferrimagnetism**.
+Ferrites, the ceramic magnets in high-frequency transformers, have the **spinel structure AB₂O₄** (midsem, Raghavan). In an **inverse spinel** such as Fe₃O₄, ions on the two kinds of site point their moments **opposite but unequally**, giving **ferrimagnetism**.
 
 :::key
 - Four quantum numbers: **n, l, $m_l$, $m_s$**; spin ($m_s$) gives the magnetic moment.

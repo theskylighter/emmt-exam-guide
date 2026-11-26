@@ -415,7 +415,8 @@ async function animations(browser) {
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
       page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
-      await page.goto(`${BASE}/${slug}`, { waitUntil: "networkidle" });
+      // not "networkidle": animated iframes keep pages busy and live runs stalled on it; wait for the player instead
+      await page.goto(`${BASE}/${slug}`, { waitUntil: "domcontentloaded" });
       const frameEl = page.locator(`iframe[src="/anim/${name}.html"]`).first();
       await frameEl.scrollIntoViewIfNeeded();
       const f = page.frameLocator(`iframe[src="/anim/${name}.html"]`).first();

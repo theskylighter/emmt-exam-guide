@@ -39,7 +39,7 @@ $$\chi = \frac{C}{T - T_c} \qquad (C = \text{material constant},\ T > T_c)$$
 <<SVG:askeland_table20_3:compact>>
 
 :::note
-The table lists the strongest magnet material as "Nd2Fe12B"; this is a misprint in the book for **Nd2Fe14B**. Notice its $T_c$ is only **312 C**, a real limitation in hot electric-vehicle motors. **Gadolinium** ($T_c$ = 16 C) is ferromagnetic only on a cold day.
+The table lists the strongest magnet material as "Nd₂Fe₁₂B"; this is a misprint in the book for **Nd₂Fe₁₄B**. Notice its $T_c$ is only **312 C**, a real limitation in hot electric-vehicle motors. **Gadolinium** ($T_c$ = 16 C) is ferromagnetic only on a cold day.
 :::
 
 ### Uses of the Curie temperature

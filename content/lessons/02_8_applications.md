@@ -21,7 +21,7 @@ The assignment asks for **any three industrial applications**. A list of names e
 **What the job needs.**
 - **Small loop area** (low $H_c$) for low hysteresis loss.
 - **High permeability and saturation** so a small current gives a large flux.
-- **High resistivity** to cut **eddy currents**: induced currents in the core that waste power as I2R heat, especially at high frequency.
+- **High resistivity** to cut **eddy currents**: induced currents in the core that waste power as I²R heat, especially at high frequency.
 
 **Materials.**
 - **Grain-oriented Fe-3% Si steel**: silicon raises resistivity; texture puts the easy direction along the sheet; the core is built from thin insulated **laminations** to block eddy currents.
@@ -39,7 +39,7 @@ The assignment asks for **any three industrial applications**. A list of names e
 - A **Curie temperature** well above the operating temperature.
 
 **Materials.**
-- **Nd2Fe14B**: highest $(BH)_{max}$ (about 290-445 kJ/m³). Limits (Askeland): **low $T_c$ (312 C), poor corrosion resistance, brittleness**.
+- **Nd₂Fe₁₄B**: highest $(BH)_{max}$ (about 290-445 kJ/m³). Limits (Askeland): **low $T_c$ (312 C), poor corrosion resistance, brittleness**.
 - **Sm-Co**: lower energy but $T_c$ about 723 C: high-temperature aerospace and military motors.
 - **Ba/Sr ferrite**: cheap and corrosion-proof: loudspeakers, small DC motors, fridge magnets.
 - **Alnico**: very high $T_c$ (about 780-900 C) and stable: sensors, meters, guitar pickups.
@@ -55,7 +55,7 @@ The lifting force of a permanent magnet is F = $\mu_0$ M2 A / 2 (Askeland eq. 20
 - **Moderate coercivity**: high enough that stray fields cannot erase data, low enough that the head can rewrite it.
 - **Acicular (needle-shaped) particles**, which raise coercivity through **shape anisotropy**.
 
-**Materials.** gamma-Fe2O3, Co-doped gamma-Fe2O3, CrO2, acicular Fe particles, Ba ferrite (tapes and cards); **sputtered Co-Pt-Ta-Cr thin films** on hard disks. **Credit-card and ATM stripes** use gamma-Fe2O3 or Fe3O4 particles.
+**Materials.** γ-Fe₂O₃, Co-doped γ-Fe₂O₃, CrO₂, acicular Fe particles, Ba ferrite (tapes and cards); **sputtered Co-Pt-Ta-Cr thin films** on hard disks. **Credit-card and ATM stripes** use γ-Fe₂O₃ or Fe₃O₄ particles.
 
 <<SVG:askeland_table20_5>>
 
@@ -66,7 +66,7 @@ Other applications you may name: **magnetorheological (MR) fluids** of soft carb
 :::key
 - **Cores (soft)**: narrow loop, high permeability, high resistivity: Fe-Si laminations, Metglas, ferrites.
 - **Permanent magnets (hard)**: high $B_r$, $H_c$ and $(BH)_{max}$: Nd-Fe-B, Sm-Co, ferrite, Alnico.
-- **Storage (square loop)**: stable bits, moderate $H_c$, acicular particles: gamma-Fe2O3, CrO2, Co-Pt-Cr films.
+- **Storage (square loop)**: stable bits, moderate $H_c$, acicular particles: γ-Fe₂O₃, CrO₂, Co-Pt-Cr films.
 :::
 
 :::mistakes
@@ -87,7 +87,7 @@ Other applications you may name: **magnetorheological (MR) fluids** of soft carb
 
 :::q Q1 · Why are transformer cores made of thin laminations instead of a solid block?
 :::ans
-Thin, insulated sheets block the paths of **eddy currents**, which would otherwise circulate in a solid block and waste power as I2R heat.
+Thin, insulated sheets block the paths of **eddy currents**, which would otherwise circulate in a solid block and waste power as I²R heat.
 :::
 :::
 

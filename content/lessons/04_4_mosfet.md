@@ -23,7 +23,7 @@ A garden hose with a foot on it. The hose is the channel, the water is current. 
 1. Start with an **n-type silicon substrate**.
 2. Make two small islands of **p-type** silicon: the **source** and the **drain**.
 3. Join them with a narrow **p-type channel**.
-4. Oxidise the surface to form an insulating **SiO2 layer** over the channel.
+4. Oxidise the surface to form an insulating **SiO₂ layer** over the channel.
 5. Put a metal contact, the **gate**, on top of the oxide. Source and drain also get metal contacts.
 
 **Working:**
@@ -44,7 +44,7 @@ A garden hose with a foot on it. The hose is the channel, the water is current. 
 | Typical use | analog amplifiers, power circuits | digital logic, memory, processors |
 
 :::key
-- Source and drain (p) in an n-substrate, joined by a p-channel, with an **SiO2-insulated gate** on top.
+- Source and drain (p) in an n-substrate, joined by a p-channel, with an **SiO₂-insulated gate** on top.
 - The **gate field** changes the **channel conductivity**.
 - Gate current is almost zero, so MOSFETs suit sources that cannot supply current.
 - MOSFETs use **majority** carriers; BJTs use injected **minority** carriers.
@@ -53,7 +53,7 @@ A garden hose with a foot on it. The hose is the channel, the water is current. 
 :::mistakes
 - **"Current flows into the gate."** The oxide is an insulator; gate current is extremely small.
 - **"The MOSFET works by injecting minority carriers, like a BJT."** It modulates the majority carriers already in the channel.
-- **Forgetting the oxide layer in the diagram.** The "O" in MOS is the SiO2 insulator, and it is what makes the device work.
+- **Forgetting the oxide layer in the diagram.** The "O" in MOS is the SiO₂ insulator, and it is what makes the device work.
 :::
 
 :::exam
@@ -61,14 +61,14 @@ A garden hose with a foot on it. The hose is the channel, the water is current. 
 :::
 
 :::def
-A **MOSFET** (metal-oxide-semiconductor field-effect transistor) consists of two p-type islands (**source** and **drain**) in an n-type substrate joined by a narrow p-type **channel**, with a metal **gate** separated from the channel by an insulating **SiO2** layer. A voltage on the gate creates a field that changes the channel's conductivity, so a small gate voltage controls a large source-drain current with almost no gate current.
+A **MOSFET** (metal-oxide-semiconductor field-effect transistor) consists of two p-type islands (**source** and **drain**) in an n-type substrate joined by a narrow p-type **channel**, with a metal **gate** separated from the channel by an insulating **SiO₂** layer. A voltage on the gate creates a field that changes the channel's conductivity, so a small gate voltage controls a large source-drain current with almost no gate current.
 :::
 
 ## Quick Check
 
 :::q Q1 · Why is a MOSFET preferred when the signal source can supply very little current?
 :::ans
-Its gate is **insulated** by SiO2, so it draws almost **no input current**. It is controlled by the gate voltage (field) alone.
+Its gate is **insulated** by SiO₂, so it draws almost **no input current**. It is controlled by the gate voltage (field) alone.
 :::
 :::
 
