@@ -367,13 +367,29 @@ async function phone(browser) {
   await page.keyboard.press("Escape");
 
   // every page must fit the screen width (no sideways scrolling)
-  const bad = [];
+  const bad = [], badMath = [], badCells = [];
+  let formulas = 0;
   for (const p of ["/", ...lessons.map((l) => "/" + l.slug)]) {
     await page.goto(BASE + p, { waitUntil: "load" });
     const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (over > 1) bad.push(`${p} (+${over}px)`);
+    // formulas: every $...$ rendered by KaTeX; table cells never show a stray "|" (a cell-split bug)
+    const m = await page.evaluate(() => ({
+      n: document.querySelectorAll(".math").length,
+      ok: document.querySelectorAll(".math .katex").length,
+      err: [...document.querySelectorAll(".math-error")].map((e) => e.dataset.tex).slice(0, 2),
+      cells: [...document.querySelectorAll("td")].filter((td) => {
+        const c = td.cloneNode(true); c.querySelectorAll(".math, code").forEach((e) => e.remove());
+        return /(^|\s)\|(\s|$)/.test(c.textContent);
+      }).length,
+    }));
+    formulas += m.n;
+    if (m.ok !== m.n || m.err.length) badMath.push(`${p} ${m.ok}/${m.n} ${m.err.join(" ; ")}`);
+    if (m.cells) badCells.push(`${p} (${m.cells})`);
   }
   check(`phone: no page scrolls sideways (${lessons.length + 1} pages)`, bad.length === 0, bad.slice(0, 5).join(", "));
+  check(`math: every formula renders with KaTeX (${formulas} on all pages)`, badMath.length === 0, badMath.slice(0, 3).join(" | "));
+  check("tables: no cell shows a stray '|' (cells split correctly)", badCells.length === 0, badCells.slice(0, 5).join(", "));
   check("console: no errors on phone", errors.length === 0, errors.slice(0, 2).join(" | "));
   await ctx.close();
 }
