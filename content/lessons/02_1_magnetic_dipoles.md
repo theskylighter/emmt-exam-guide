@@ -13,7 +13,7 @@ That left a puzzle:
 
 The moving charges are the **electrons inside every atom**. Askeland (Figure 20-1) names two sources:
 
-1. **Electron spin**: the electron spinning about its own axis acts like a tiny bar magnet. Its direction (up or down) is set by the spin quantum number **m_s = +1/2 or -1/2**.
+1. **Electron spin**: the electron spinning about its own axis acts like a tiny bar magnet. Its direction (up or down) is set by the spin quantum number **$m_s$ = +1/2 or -1/2**.
 2. **Orbital motion**: the electron circling the nucleus is a tiny current loop, which also makes a magnetic field.
 
 <<SVG:askeland_fig20_1>>
@@ -28,9 +28,7 @@ A crowd of people each holding a compass needle. If everyone points their needle
 
 The magnetic moment of one electron spin is the **Bohr magneton**:
 
-```text
-mu_B = q h / (4 pi m_e) = 9.274 x 10^-24 A.m^2
-```
+$$\mu_B = \frac{qh}{4\pi m_e} = 9.274 \times 10^{-24}\ \text{A·m}^2$$
 
 ### Why most atoms cancel
 
@@ -49,7 +47,7 @@ Having unpaired spins is not enough; Mn and Cr have them too. In **Fe, Co and Ni
 
 :::key
 - Two sources of an electron's moment: **spin** and **orbital motion**.
-- Unit: **Bohr magneton**, 9.274 x 10^-24 A.m2.
+- Unit: **Bohr magneton**, 9.274 x $10^{-24}$ A.m2.
 - Paired electrons cancel, so only **unpaired** electrons (mainly in the 3d shell) give a net moment.
 - **Exchange interaction** lines neighbours up in Fe, Co, Ni: ferromagnetism.
 :::
@@ -65,7 +63,7 @@ Having unpaired spins is not enough; Mn and Cr have them too. In **Fe, Co and Ni
 :::
 
 :::def
-The **magnetic moment of an atom** arises from the **spin** of its electrons about their own axes and from their **orbital motion** around the nucleus. Its basic unit is the **Bohr magneton**, mu_B = qh/4 pi m_e = 9.274 x 10^-24 A.m2. Paired electrons cancel, so a net moment arises only from **unpaired electrons**, chiefly in partly filled 3d (and 4f) shells.
+The **magnetic moment of an atom** arises from the **spin** of its electrons about their own axes and from their **orbital motion** around the nucleus. Its basic unit is the **Bohr magneton**, $\mu_B = qh/4\pi m_e = 9.274 \times 10^{-24}\ \text{A·m}^2$. Paired electrons cancel, so a net moment arises only from **unpaired electrons**, chiefly in partly filled 3d (and 4f) shells.
 :::
 
 ## Quick Check

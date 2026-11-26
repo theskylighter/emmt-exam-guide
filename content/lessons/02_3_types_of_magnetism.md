@@ -17,11 +17,11 @@ The answers give five behaviours.
 
 ## How It Works
 
-| Type | What the atoms do | Susceptibility chi | Examples |
+| Type | What the atoms do | Susceptibility $\chi$ | Examples |
 |---|---|---|---|
-| **Diamagnetic** | no net moment; the field distorts electron orbits and induces a small moment that **opposes** the field | small, **negative** (about -10^-6) | Cu, Ag, Au, Si, alumina; superconductors are perfect diamagnets (chi = -1) |
-| **Paramagnetic** | unpaired electrons give moments that **align with** the field, but neighbours **do not interact**; alignment is lost when the field is removed | small, positive (10^-6 to 10^-4) | Al, Ti, alloys of Cu |
-| **Ferromagnetic** | unpaired 3d spins and the **exchange interaction** align neighbours **parallel**; large magnetization even in small fields | very large, up to **10^6** | Fe, Ni, Co, Gd |
+| **Diamagnetic** | no net moment; the field distorts electron orbits and induces a small moment that **opposes** the field | small, **negative** (about -$10^{-6}$) | Cu, Ag, Au, Si, alumina; superconductors are perfect diamagnets ($\chi$ = -1) |
+| **Paramagnetic** | unpaired electrons give moments that **align with** the field, but neighbours **do not interact**; alignment is lost when the field is removed | small, positive ($10^{-6}$ to $10^{-4}$) | Al, Ti, alloys of Cu |
+| **Ferromagnetic** | unpaired 3d spins and the **exchange interaction** align neighbours **parallel**; large magnetization even in small fields | very large, up to **$10^{6}$** | Fe, Ni, Co, Gd |
 | **Antiferromagnetic** | neighbouring moments line up **opposite and equal**, so they cancel | small, positive | Mn, Cr, MnO, NiO, CoO |
 | **Ferrimagnetic** | two kinds of ions point **opposite but unequal**, leaving a net moment | large | ferrites such as Fe3O4, NiZn and MnZn ferrites |
 
@@ -35,7 +35,7 @@ Ferrimagnetic ferrites are **ceramics**, so they are good **electrical insulator
 
 ### Above the Curie temperature
 
-Ferromagnetic and ferrimagnetic materials become **paramagnetic** above their Curie temperature, where the susceptibility follows the **Curie-Weiss law**, chi = C / (T - Tc). See [Curie Temperature](02_6_curie_temperature.html).
+Ferromagnetic and ferrimagnetic materials become **paramagnetic** above their Curie temperature, where the susceptibility follows the **Curie-Weiss law**, $\chi = C/(T - T_c)$. See [Curie Temperature](02_6_curie_temperature.html).
 
 ### Superparamagnetism (a bonus)
 
@@ -46,9 +46,9 @@ A classroom told to face the front. **Diamagnetic** students stubbornly lean sli
 :::
 
 :::key
-- Diamagnetic: chi **negative**, opposes the field.
-- Paramagnetic: chi small positive, **no interaction** between moments.
-- Ferromagnetic: chi huge, neighbours **parallel** (Fe, Co, Ni, Gd).
+- Diamagnetic: $\chi$ **negative**, opposes the field.
+- Paramagnetic: $\chi$ small positive, **no interaction** between moments.
+- Ferromagnetic: $\chi$ huge, neighbours **parallel** (Fe, Co, Ni, Gd).
 - Antiferromagnetic: neighbours **antiparallel and equal**, cancel (MnO).
 - Ferrimagnetic: **antiparallel but unequal**, net moment (ferrites, insulating).
 :::
@@ -61,16 +61,16 @@ A classroom told to face the front. **Diamagnetic** students stubbornly lean sli
 
 :::exam
 - *"Classify magnetic materials with examples"* (5 marks): the table above plus Fig 20-3.
-- MCQ traps: sign of chi for diamagnets; which type ferrites are.
+- MCQ traps: sign of $\chi$ for diamagnets; which type ferrites are.
 :::
 
 :::def
-Materials are classified by their response to a magnetic field: **diamagnetic** (induced moment opposes the field, chi about -10^-6), **paramagnetic** (unpaired, non-interacting moments align weakly, chi 10^-6 to 10^-4), **ferromagnetic** (unpaired moments aligned parallel by the exchange interaction, chi up to 10^6), **antiferromagnetic** (equal antiparallel moments, zero net magnetization) and **ferrimagnetic** (unequal antiparallel moments, net magnetization).
+Materials are classified by their response to a magnetic field: **diamagnetic** (induced moment opposes the field, $\chi \approx -10^{-6}$), **paramagnetic** (unpaired, non-interacting moments align weakly, $\chi$ from $10^{-6}$ to $10^{-4}$), **ferromagnetic** (unpaired moments aligned parallel by the exchange interaction, $\chi$ up to $10^{6}$), **antiferromagnetic** (equal antiparallel moments, zero net magnetization) and **ferrimagnetic** (unequal antiparallel moments, net magnetization).
 :::
 
 ## Quick Check
 
-:::q Q1 · A material has chi = -1. What is it?
+:::q Q1 · A material has $\chi$ = -1. What is it?
 :::ans
 A **perfect diamagnet**, i.e. a superconductor: it expels the field completely.
 :::

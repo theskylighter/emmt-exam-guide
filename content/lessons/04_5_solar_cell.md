@@ -19,7 +19,7 @@ One structure, three devices: a p-n junction with current in is a **diode**; wit
 
 ## The Idea in Plain Words
 
-A photon with energy at least equal to the band gap (**h nu >= E_g**, with E_g = 1.1 eV for Si) lifts an electron from the valence band into the conduction band, creating an **electron-hole pair** (see [Conduction and Energy Bands](03_1_conduction_bands.html)). In plain silicon the pair would just recombine and give off heat. **Near a junction, the built-in field separates them**: electrons go to the n-side, holes to the p-side. The charges pile up and give a voltage.
+A photon with energy at least equal to the band gap (**$h\nu \geq E_g$**, with $E_g$ = 1.1 eV for Si) lifts an electron from the valence band into the conduction band, creating an **electron-hole pair** (see [Conduction and Energy Bands](03_1_conduction_bands.html)). In plain silicon the pair would just recombine and give off heat. **Near a junction, the built-in field separates them**: electrons go to the n-side, holes to the p-side. The charges pile up and give a voltage.
 
 :::analogy
 The depletion region is a permanent slope. Light keeps dropping marbles of two colours onto it: blue marbles (electrons) always roll one way, red ones (holes) the other. They collect at opposite ends, and connecting the two ends with a wire lets them flow round and meet, which is the current that does useful work.
@@ -40,11 +40,11 @@ The depletion region is a permanent slope. Light keeps dropping marbles of two c
 
 ## Working, Step by Step
 
-1. **Absorption**: a photon with h nu >= E_g creates an **electron-hole pair** in the base or emitter.
+1. **Absorption**: a photon with $h\nu \geq E_g$ creates an **electron-hole pair** in the base or emitter.
 2. **Diffusion to the junction**: pairs created within about one diffusion length of the depletion region reach its field.
 3. **Separation**: the built-in field sweeps **electrons to the n-side** and **holes to the p-side**.
-4. **Photovoltage**: the n-side charges negative and the p-side positive. With no load connected this is the **open-circuit voltage Voc**.
-5. **Photocurrent**: with a load connected, electrons leave the n-side through the front grid, flow through the load and return to the p-side via the back contact, where they recombine with holes. This **light-generated current I_L** is proportional to the light intensity.
+4. **Photovoltage**: the n-side charges negative and the p-side positive. With no load connected this is the **open-circuit voltage $V_{oc}$**.
+5. **Photocurrent**: with a load connected, electrons leave the n-side through the front grid, flow through the load and return to the p-side via the back contact, where they recombine with holes. This **light-generated current $I_L$** is proportional to the light intensity.
 
 :::warn
 The cell is **not** biased by a battery. It generates its own voltage and pushes current **out of its positive terminal**, so it works in the **fourth quadrant** of the diode's I-V curve (V positive, I negative): it delivers power instead of using it. The next lesson, [J-V Characteristics](04_6_solar_jv.html), shows this on the graph.
@@ -52,13 +52,13 @@ The cell is **not** biased by a battery. It generates its own voltage and pushes
 
 :::key
 - A solar cell is a **large-area p-n junction** close to the surface.
-- **Photon (h nu >= E_g) -> electron-hole pair -> field separates them -> voltage and current.**
+- **Photon ($h\nu \geq E_g$) → electron-hole pair → field separates them → voltage and current.**
 - Layers: front grid (-), anti-reflection coating, thin n+ emitter, junction, thick p-base, back contact (+).
 - Photocurrent is proportional to light intensity.
 :::
 
 :::mistakes
-- **"Any light works."** Photons with energy below E_g (wavelength longer than about 1.1 um for Si) pass through without making pairs.
+- **"Any light works."** Photons with energy below $E_g$ (wavelength longer than about 1.1 um for Si) pass through without making pairs.
 - **"The emitter should be thick to absorb light."** It is thin so that light reaches the junction; the thick **base** does most of the absorbing.
 - **"The front contact covers the whole surface."** It is a thin finger grid, otherwise it would block the light.
 - **Mixing up terminals.** Electrons collect at the **n-side (front, negative)**; holes at the **p-side (back, positive)**.
@@ -70,7 +70,7 @@ The cell is **not** biased by a battery. It generates its own voltage and pushes
 :::
 
 :::def
-A **solar cell** is a large-area p-n junction that converts light directly into electricity by the **photovoltaic effect**. It has a thin, heavily doped n+ emitter on a thick p-type base, a front metal grid, an anti-reflection coating and a back contact. Photons with energy at least E_g create electron-hole pairs; the built-in field of the junction separates them (electrons to n, holes to p), producing a photovoltage and, through an external load, a photocurrent.
+A **solar cell** is a large-area p-n junction that converts light directly into electricity by the **photovoltaic effect**. It has a thin, heavily doped n+ emitter on a thick p-type base, a front metal grid, an anti-reflection coating and a back contact. Photons with energy at least $E_g$ create electron-hole pairs; the built-in field of the junction separates them (electrons to n, holes to p), producing a photovoltage and, through an external load, a photocurrent.
 :::
 
 ## Quick Check

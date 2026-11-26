@@ -1,4 +1,6 @@
 import { MouseEvent, useEffect, useRef } from "react";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import { Link, Navigate, useLocation, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, BookMarked, Clock } from "lucide-react";
 import { findLesson, HOME_SLUG, lessonOrder, lessonPath } from "../course";
@@ -33,6 +35,23 @@ export function LessonPage() {
     if (target instanceof HTMLDetailsElement) target.open = true;
     target.scrollIntoView({ block: "start" });
   }, [hash, slug, key]);
+
+  // Render TeX spans (written as $...$ and $$...$$ in the lessons) with KaTeX.
+  useEffect(() => {
+    bodyRef.current?.querySelectorAll<HTMLElement>(".math[data-tex]").forEach((el) => {
+      if (el.dataset.done) return;
+      try {
+        katex.render(el.dataset.tex ?? "", el, {
+          displayMode: el.classList.contains("display"),
+          throwOnError: true,
+        });
+        el.dataset.done = "1";
+      } catch {
+        el.classList.add("math-error");
+        el.dataset.done = "err";
+      }
+    });
+  }, [slug]);
 
   // Open or close every answer block when the topbar toggle changes, and on each new lesson.
   useEffect(() => {

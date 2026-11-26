@@ -26,9 +26,7 @@ A one-way turnstile. Push from the correct side (forward bias) and it spins free
 1. Holes on the p-side and electrons on the n-side are both **pushed toward the junction**.
 2. They meet in the **recombination zone** and annihilate each other:
 
-```text
-electron + hole  ->  energy          (Callister eq. 12.21)
-```
+$$\text{electron} + \text{hole} \;\longrightarrow\; \text{energy} \qquad \text{(Callister eq. 12.21)}$$
 
 3. The battery keeps supplying new carriers, so a **large current** flows with **low resistivity**.
 
@@ -49,14 +47,12 @@ Equation 12.21 is the principle of the **LED**: in a forward-biased junction, re
 | Region | What the curve does | Why |
 |---|---|---|
 | Forward bias (right) | current stays small until about 0.7 V (Si), then rises **exponentially** | the barrier has been lowered enough for carriers to flood across |
-| Reverse bias (left) | a tiny, nearly constant current **I_R** | only the few minority carriers can cross |
+| Reverse bias (left) | a tiny, nearly constant current **$I_R$** | only the few minority carriers can cross |
 | Breakdown (far left) | current **rises abruptly** at a large reverse voltage (sometimes several hundred volts) | large numbers of carriers are suddenly generated |
 
 The standard (Shockley) diode equation describes the curve:
 
-```text
-I = I0 [ exp(eV / kT) - 1 ]
-```
+$$I = I_0\left[\exp\!\left(\frac{eV}{kT}\right) - 1\right]$$
 
 For large forward V the exponential dominates; for reverse V the bracket tends to -1, so I tends to **-I0**, the small saturation current.
 
@@ -64,7 +60,7 @@ For large forward V the exponential dominates; for reverse V the bracket tends t
 
 <<SVG:callister_fig12_22:compact>>
 
-The input voltage swings between **+V0 and -V0** (a). On forward half-cycles the current is large (**I_F**); on reverse half-cycles it is almost zero (**I_R**, much smaller than I_F) (b). **AC goes in, one-way pulsating current comes out.** That is a **rectifier**.
+The input voltage swings between **+$V_0$ and -V0** (a). On forward half-cycles the current is large (**$I_F$**); on reverse half-cycles it is almost zero (**$I_R$**, much smaller than $I_F$) (b). **AC goes in, one-way pulsating current comes out.** That is a **rectifier**.
 
 :::key
 - Forward bias: **p to +**, barrier lowered, large exponential current.
@@ -75,7 +71,7 @@ The input voltage swings between **+V0 and -V0** (a). On forward half-cycles the
 
 :::mistakes
 - **Swapping the bias polarities.** Forward means the p-side goes to the **positive** terminal. Remember "**P**ositive to **P**".
-- **"Reverse current is exactly zero."** It is small but not zero (I_R in Fig 12.21).
+- **"Reverse current is exactly zero."** It is small but not zero ($I_R$ in Fig 12.21).
 - **"Breakdown destroys the diode."** Not necessarily; Zener diodes are designed to operate in breakdown.
 - **Drawing the forward curve as a straight line.** It is exponential, with a knee near 0.7 V for Si.
 :::

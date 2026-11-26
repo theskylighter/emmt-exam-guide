@@ -9,7 +9,7 @@ The assignment asks for **any three industrial applications**. A list of names e
 | Job | Demand | Loop | Material class |
 |---|---|---|---|
 | Reverse the field 50 times a second with little loss | low loss, high permeability | **narrow** | soft |
-| Provide a steady field forever, for free | high Br and Hc, large (BH)max | **wide** | hard |
+| Provide a steady field forever, for free | high $B_r$ and $H_c$, large $(BH)_{max}$ | **wide** | hard |
 | Hold a 0 or 1 and switch cleanly | two stable states | **square** | semi-hard |
 
 ## How It Works
@@ -19,7 +19,7 @@ The assignment asks for **any three industrial applications**. A list of names e
 **Story.** In the 1880s-90s Edison's DC grid lost to Westinghouse and Tesla's **AC** grid, largely because AC voltage can be stepped up and down with **transformers**. Every transformer core is cycled round its hysteresis loop **50-60 times a second**, so any loss per cycle adds up to large amounts of heat. In 1892 Charles Steinmetz showed that the hysteresis loss grows with the loop area.
 
 **What the job needs.**
-- **Small loop area** (low Hc) for low hysteresis loss.
+- **Small loop area** (low $H_c$) for low hysteresis loss.
 - **High permeability and saturation** so a small current gives a large flux.
 - **High resistivity** to cut **eddy currents**: induced currents in the core that waste power as I2R heat, especially at high frequency.
 
@@ -33,18 +33,18 @@ The assignment asks for **any three industrial applications**. A list of names e
 **Story.** Every motor and generator needs a magnetic field. Electromagnets need power all the time; a strong permanent magnet gives the field **for free**. The **Nd-Fe-B revolution (1984)** made motors small and light enough for cordless tools, hard-disk drives, drones, **electric-vehicle traction motors** and direct-drive **wind turbines**.
 
 **What the job needs.**
-- **High remanence Br**: a strong field.
-- **High coercivity Hc**: it must not be demagnetised by the motor's own opposing fields.
-- **Large (BH)max**: a smaller magnet does the same job.
+- **High remanence $B_r$**: a strong field.
+- **High coercivity $H_c$**: it must not be demagnetised by the motor's own opposing fields.
+- **Large $(BH)_{max}$**: a smaller magnet does the same job.
 - A **Curie temperature** well above the operating temperature.
 
 **Materials.**
-- **Nd2Fe14B**: highest (BH)max (about 290-445 kJ/m3). Limits (Askeland): **low Tc (312 C), poor corrosion resistance, brittleness**.
-- **Sm-Co**: lower energy but Tc about 723 C: high-temperature aerospace and military motors.
+- **Nd2Fe14B**: highest $(BH)_{max}$ (about 290-445 kJ/m³). Limits (Askeland): **low $T_c$ (312 C), poor corrosion resistance, brittleness**.
+- **Sm-Co**: lower energy but $T_c$ about 723 C: high-temperature aerospace and military motors.
 - **Ba/Sr ferrite**: cheap and corrosion-proof: loudspeakers, small DC motors, fridge magnets.
-- **Alnico**: very high Tc (about 780-900 C) and stable: sensors, meters, guitar pickups.
+- **Alnico**: very high $T_c$ (about 780-900 C) and stable: sensors, meters, guitar pickups.
 
-The lifting force of a permanent magnet is F = mu0 M2 A / 2 (Askeland eq. 20-11).
+The lifting force of a permanent magnet is F = $\mu_0$ M2 A / 2 (Askeland eq. 20-11).
 
 ### Application 3: Magnetic data storage (square loop, semi-hard)
 
@@ -65,8 +65,8 @@ Other applications you may name: **magnetorheological (MR) fluids** of soft carb
 
 :::key
 - **Cores (soft)**: narrow loop, high permeability, high resistivity: Fe-Si laminations, Metglas, ferrites.
-- **Permanent magnets (hard)**: high Br, Hc and (BH)max: Nd-Fe-B, Sm-Co, ferrite, Alnico.
-- **Storage (square loop)**: stable bits, moderate Hc, acicular particles: gamma-Fe2O3, CrO2, Co-Pt-Cr films.
+- **Permanent magnets (hard)**: high $B_r$, $H_c$ and $(BH)_{max}$: Nd-Fe-B, Sm-Co, ferrite, Alnico.
+- **Storage (square loop)**: stable bits, moderate $H_c$, acicular particles: gamma-Fe2O3, CrO2, Co-Pt-Cr films.
 :::
 
 :::mistakes
@@ -80,7 +80,7 @@ Other applications you may name: **magnetorheological (MR) fluids** of soft carb
 :::
 
 :::def
-**Applications of magnetic materials** follow from the hysteresis loop: **soft** materials (narrow loop, high permeability, low loss, high resistivity) are used for **transformer, motor and generator cores** and inductors; **hard** materials (high remanence, coercivity and (BH)max) are used as **permanent magnets** in motors, generators and loudspeakers; and materials with a **square loop** and moderate coercivity are used for **magnetic data storage** such as hard disks, tapes and card stripes.
+**Applications of magnetic materials** follow from the hysteresis loop: **soft** materials (narrow loop, high permeability, low loss, high resistivity) are used for **transformer, motor and generator cores** and inductors; **hard** materials (high remanence, coercivity and $(BH)_{max}$) are used as **permanent magnets** in motors, generators and loudspeakers; and materials with a **square loop** and moderate coercivity are used for **magnetic data storage** such as hard disks, tapes and card stripes.
 :::
 
 ## Quick Check

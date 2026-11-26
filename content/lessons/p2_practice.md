@@ -16,7 +16,7 @@ So that carriers injected from the emitter **cross it without recombining** and 
 
 :::q A3 · Define fill factor and efficiency of a solar cell.
 :::ans
-**FF = VmJm / (VocJsc)**, the squareness of the J-V curve. **eta = FF x Voc x Jsc / P_in**, electrical power out divided by light power in (P_in = 100 mW/cm2).
+**$FF = V_m J_m/(V_{oc} J_{sc})$**, the squareness of the J-V curve. **$\eta = FF \cdot V_{oc} \cdot J_{sc}/P_{in}$**, electrical power out divided by light power in ($P_{in}$ = 100 mW/cm²).
 :::
 :::
 
@@ -76,21 +76,21 @@ The generation of a **voltage and current** in a material (here a p-n junction) 
 
 ## C. Numericals
 
-:::q C1 · A transistor has I_B = 40 uA and beta = 125. Find I_C and I_E.
+:::q C1 · A transistor has $I_B$ = 40 uA and $\beta$ = 125. Find $I_C$ and $I_E$.
 :::ans
-I_C = beta I_B = 125 x 40 uA = **5 mA**. I_E = I_B + I_C = **5.04 mA**.
+$I_C = \beta I_B = 125 \times 40\ \mu\text{A} =$ **5 mA**. $I_E = I_B + I_C =$ **5.04 mA**.
 :::
 :::
 
-:::q C2 · A cell of area 100 cm2 has Voc = 0.62 V, Isc = 3.6 A and FF = 0.78 under 100 mW/cm2. Find Pmax and efficiency.
+:::q C2 · A cell of area 100 cm² has $V_{oc}$ = 0.62 V, $I_{sc}$ = 3.6 A and FF = 0.78 under 100 mW/cm². Find $P_{max}$ and efficiency.
 :::ans
-Pmax = FF x Voc x Isc = 0.78 x 0.62 x 3.6 = **1.74 W**. P_in = 100 mW/cm2 x 100 cm2 = 10 W. eta = 1.74 / 10 = **17.4%**.
+$P_{max} = FF \cdot V_{oc} \cdot I_{sc} = 0.78 \times 0.62 \times 3.6 =$ **1.74 W**. $P_{in} = 100\ \text{mW/cm}^2 \times 100\ \text{cm}^2 = 10$ W. $\eta = 1.74/10 =$ **17.4%**.
 :::
 :::
 
-:::q C3 · Find Voc for a cell with J_L = 40 mA/cm2 and J0 = 10^-12 A/cm2 at 300 K (n = 1, kT/q = 0.0259 V).
+:::q C3 · Find $V_{oc}$ for a cell with $J_L$ = 40 mA/cm² and $J_0$ = $10^{-12}$ A/cm² at 300 K (n = 1, kT/q = 0.0259 V).
 :::ans
-J_L / J0 = 0.04 / 10^-12 = 4 x 10^10. ln(4 x 10^10) = 24.41. Voc = 0.0259 x 24.41 = **0.632 V**.
+$J_L/J_0 = 0.04/10^{-12} = 4 \times 10^{10}$. $\ln(4 \times 10^{10}) = 24.41$. $V_{oc} = 0.0259 \times 24.41 =$ **0.632 V**.
 :::
 :::
 
@@ -110,6 +110,6 @@ J_L / J0 = 0.04 / 10^-12 = 4 x 10^10. ln(4 x 10^10) = 24.41. Voc = 0.0259 x 24.4
 
 :::q D3 · Explain the construction and working of a solar cell and its J-V characteristics. (10 marks)
 :::ans
-**Outline:** labelled cross-section; four working steps; J-V equation; dark vs illuminated curve; Jsc, Voc, MPP, FF and efficiency with the rectangles; effect of light and temperature. Revise [Solar Cell](04_5_solar_cell.html) and [J-V Characteristics](04_6_solar_jv.html).
+**Outline:** labelled cross-section; four working steps; J-V equation; dark vs illuminated curve; $J_{sc}$, $V_{oc}$, MPP, FF and efficiency with the rectangles; effect of light and temperature. Revise [Solar Cell](04_5_solar_cell.html) and [J-V Characteristics](04_6_solar_jv.html).
 :::
 :::

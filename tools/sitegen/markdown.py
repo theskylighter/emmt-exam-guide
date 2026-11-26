@@ -23,6 +23,14 @@ from .config import DIAGRAMS_DIR
 # --------------------------------------------------------------------------- inline
 
 
+def math_span(tex: str, display: bool = False) -> str:
+    """A TeX span; the web app renders it with KaTeX (the escaped source is the fallback)."""
+    esc = html.escape(tex.strip(), quote=True)
+    if display:
+        return f'<div class="math display" data-tex="{esc}">{esc}</div>'
+    return f'<span class="math" data-tex="{esc}">{esc}</span>'
+
+
 def inline(text: str) -> str:
     """Render inline formatting. Code spans are stashed first so their contents stay literal."""
     codes: list[str] = []
@@ -31,7 +39,12 @@ def inline(text: str) -> str:
         codes.append("<code>" + html.escape(m.group(1), quote=False) + "</code>")
         return f"\x00{len(codes) - 1}\x00"
 
+    def stash_math(m: re.Match) -> str:
+        codes.append(math_span(m.group(1) or m.group(2), display=m.group(1) is not None))
+        return f"\x00{len(codes) - 1}\x00"
+
     s = re.sub(r"`([^`]+)`", stash, text)
+    s = re.sub(r"\$\$(.+?)\$\$|(?<![\\$])\$(?=\S)([^$\n]+?)(?<=\S)\$(?!\d)", stash_math, s)
     s = html.escape(s, quote=False)
     s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
     s = re.sub(r"(?<![\w*])\*(?=[^\s*])([^*\n]+?)(?<=[^\s*])\*(?![\w*])", r"<em>\1</em>", s)
@@ -152,16 +165,20 @@ def _split_row(line: str) -> list[str]:
         line = line[1:]
     if line.endswith("|") and not line.endswith("\\|"):
         line = line[:-1]
-    cells, current, in_tick, i = [], "", False, 0
+    cells, current, in_tick, in_math, i = [], "", False, False, 0
     while i < len(line):
         c = line[i]
         if c == "\\" and i + 1 < len(line) and line[i + 1] == "|":
             current += "|"
             i += 2
             continue
-        if c == "`":
+        # a pipe inside `code` or $math$ belongs to the cell; track the two separately so a
+        # closing $ (or backtick) really ends its span
+        if c == "`" and not in_math:
             in_tick = not in_tick
-        if c == "|" and not in_tick:
+        elif c == "$" and not in_tick and (i == 0 or line[i - 1] != "\\"):
+            in_math = not in_math
+        if c == "|" and not in_tick and not in_math:
             cells.append(current.strip())
             current = ""
         else:
@@ -319,6 +336,19 @@ def render_blocks(lines: list[str], ctx: RenderContext) -> str:
         if s == "":
             flush()
             i += 1
+            continue
+
+        if s.startswith("$$"):
+            flush()
+            buf, j = [s], i
+            while not (len(" ".join(buf)) >= 4 and " ".join(buf).endswith("$$")):
+                j += 1
+                if j >= n:
+                    raise ValueError(f"unclosed $$ near: {s[:70]!r}")
+                buf.append(lines[j].strip())
+            tex = " ".join(buf).strip()[2:-2]
+            out.append(math_span(tex, display=True))
+            i = j + 1
             continue
 
         m = re.match(r"^(#{1,4})\s+(.*)$", s)

@@ -28,11 +28,9 @@ Rock-candy making, done very slowly and carefully. Dip a tiny seed crystal into 
 
 ### Segregation: why freezing purifies
 
-```text
-k0 = Cs / Cl     (concentration in solid / concentration in liquid)
-```
+$$k_0 = \frac{C_s}{C_l} \qquad \left(\frac{\text{concentration in solid}}{\text{concentration in liquid}}\right)$$
 
-- For most impurities **k0 < 1**: they prefer to stay in the **liquid**, so the solid that freezes first is **purer**, and impurities pile up toward the end of the ingot.
+- For most impurities **$k_0$ < 1**: they prefer to stay in the **liquid**, so the solid that freezes first is **purer**, and impurities pile up toward the end of the ingot.
 - Dopant values in Si: B 0.8, P 0.35, As 0.3, Sb 0.023.
 - **Float-zone refining** exploits this: a molten zone is passed along a rod several times, sweeping impurities to one end. Float-zone silicon also avoids the oxygen that CZ silicon picks up from the quartz crucible.
 
@@ -43,12 +41,12 @@ Silicon has the **diamond cubic** structure, lattice constant a = 5.43 Angstrom.
 :::key
 - Devices need **single crystals** (no grain boundaries at junctions) of extreme purity.
 - **Czochralski**: seed dipped in melt, pulled slowly and rotated, gives a single-crystal ingot.
-- **Segregation (k0 < 1)**: impurities stay in the liquid; first-frozen solid is purest; basis of float-zone refining.
+- **Segregation ($k_0$ < 1)**: impurities stay in the liquid; first-frozen solid is purest; basis of float-zone refining.
 :::
 
 :::mistakes
 - **"Czochralski purifies silicon."** Its main job is growing a **single crystal**; purification is mainly done before it (chemical refining) and by **float-zone** methods.
-- **"k0 < 1 means the impurity concentrates in the solid."** It concentrates in the **liquid**.
+- **"$k_0$ < 1 means the impurity concentrates in the solid."** It concentrates in the **liquid**.
 :::
 
 :::exam
@@ -56,7 +54,7 @@ Silicon has the **diamond cubic** structure, lattice constant a = 5.43 Angstrom.
 :::
 
 :::def
-The **Czochralski process** grows large single crystals of electronic-grade silicon by dipping an oriented seed crystal into molten silicon and slowly pulling and rotating it, so that the melt solidifies onto the seed with the same crystal orientation. The **segregation coefficient** k0 = Cs/Cl describes how impurities distribute between solid and liquid; for k0 < 1 impurities concentrate in the liquid.
+The **Czochralski process** grows large single crystals of electronic-grade silicon by dipping an oriented seed crystal into molten silicon and slowly pulling and rotating it, so that the melt solidifies onto the seed with the same crystal orientation. The **segregation coefficient** $k_0 = C_s/C_l$ describes how impurities distribute between solid and liquid; for $k_0 < 1$ impurities concentrate in the liquid.
 :::
 
 ## Quick Check
@@ -67,8 +65,8 @@ Grain boundaries or a pressed interface between p and n pieces create defects th
 :::
 :::
 
-:::q Q2 · Boron has k0 = 0.8 and antimony 0.023 in silicon. Which is distributed more evenly along a CZ ingot?
+:::q Q2 · Boron has $k_0$ = 0.8 and antimony 0.023 in silicon. Which is distributed more evenly along a CZ ingot?
 :::ans
-**Boron**: k0 close to 1 means solid and liquid concentrations are similar, so it hardly segregates. Antimony piles up strongly toward the end of the ingot.
+**Boron**: $k_0$ close to 1 means solid and liquid concentrations are similar, so it hardly segregates. Antimony piles up strongly toward the end of the ingot.
 :::
 :::

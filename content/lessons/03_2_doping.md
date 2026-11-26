@@ -2,7 +2,7 @@
 
 ## The Problem: Pure Silicon Is Useless for Devices
 
-Intrinsic silicon at room temperature has only about **10^16 carriers per m3** out of about **5 x 10^28 atoms per m3**: far too few, and the number changes wildly with temperature. Devices need a **large, controlled, temperature-stable** carrier concentration, and they need to choose **which** carrier dominates.
+Intrinsic silicon at room temperature has only about **$10^{16}$ carriers per m3** out of about **5 x $10^{28}$ atoms per m3**: far too few, and the number changes wildly with temperature. Devices need a **large, controlled, temperature-stable** carrier concentration, and they need to choose **which** carrier dominates.
 
 ## The Idea in Plain Words
 
@@ -21,15 +21,15 @@ A dance where everyone holds hands in fours. Invite a few guests with five hands
 |---|---|---|
 | Dopant | P, As, Sb (group V) | B, Al, Ga (group III) |
 | Name | donor | acceptor |
-| Majority carrier | electrons, **n approximately Nd** | holes, **p approximately Na** |
+| Majority carrier | electrons, **n approximately $N_d$** | holes, **p approximately $N_a$** |
 | Minority carrier | holes | electrons |
 | Energy level | just **below the conduction band** | just **above the valence band** |
-| Conductivity | sigma approximately n\|e\|mu_e | sigma approximately p\|e\|mu_h |
+| Conductivity | $\sigma$ approximately n\|e\|$\mu_e$ | $\sigma$ approximately p\|e\|$\mu_h$ |
 
 ### Three temperature regions of doped silicon
 
 1. **Freeze-out** (below about 100 K): too cold to free the dopant carriers.
-2. **Extrinsic** (about 100-475 K): every dopant is ionised and **n is approximately Nd**, flat with temperature. This is the **useful operating range**.
+2. **Extrinsic** (about 100-475 K): every dopant is ionised and **n is approximately $N_d$**, flat with temperature. This is the **useful operating range**.
 3. **Intrinsic** (above about 475 K): thermally created electron-hole pairs swamp the dopant. This is why chips fail when they overheat.
 
 :::note
@@ -39,7 +39,7 @@ Put a p-region next to an n-region inside **one crystal** and you get a **p-n ju
 :::key
 - **n-type**: group V donors, majority **electrons**.
 - **p-type**: group III acceptors, majority **holes**.
-- Extrinsic region: carrier count fixed by doping, n approximately Nd or p approximately Na.
+- Extrinsic region: carrier count fixed by doping, n approximately $N_d$ or p approximately $N_a$.
 :::
 
 :::mistakes
@@ -52,7 +52,7 @@ Put a p-region next to an n-region inside **one crystal** and you get a **p-n ju
 :::
 
 :::def
-**Doping** is the controlled addition of impurities to a semiconductor. Group V **donors** (P, As, Sb) give **n-type** material with electrons as majority carriers (n approximately Nd); group III **acceptors** (B, Al, Ga) give **p-type** material with holes as majority carriers (p approximately Na).
+**Doping** is the controlled addition of impurities to a semiconductor. Group V **donors** (P, As, Sb) give **n-type** material with electrons as majority carriers (n approximately $N_d$); group III **acceptors** (B, Al, Ga) give **p-type** material with holes as majority carriers (p approximately $N_a$).
 :::
 
 ## Quick Check

@@ -27,31 +27,31 @@ A stiff door on rusty hinges. Push it open (apply H) and it swings; let go and i
 
 Start with an unmagnetised (**virgin**) sample at the origin.
 
-1. **Small H**: domains nearly aligned with the field **grow** by Bloch-wall motion. It is hard at first, so M rises **slowly**. The initial slope is the **initial permeability mu_i**.
-2. **Medium H**: walls move easily and M rises **rapidly**. The steepest slope (a tangent from the origin) is the **maximum permeability mu_max**.
+1. **Small H**: domains nearly aligned with the field **grow** by Bloch-wall motion. It is hard at first, so M rises **slowly**. The initial slope is the **initial permeability $\mu_i$**.
+2. **Medium H**: walls move easily and M rises **rapidly**. The steepest slope (a tangent from the origin) is the **maximum permeability $\mu_{max}$**.
 3. **Large H**: the unfavourable domains have gone; the remaining moments **rotate** into the field direction.
-4. **Saturation**: all dipoles are aligned. This is the **saturation magnetization Ms**, the most M the material can have.
+4. **Saturation**: all dipoles are aligned. This is the **saturation magnetization $M_s$**, the most M the material can have.
 
 ### Acts 2 to 4: Remanence, coercivity and the loop
 
 <<SVG:askeland_fig20_7>>
 
 - **Point 3, saturation**: as above.
-- **Point 4, remanence**: reduce H to zero. Domain walls resist moving back, so many domains stay aligned and a **remanent magnetization Mr** remains. In B terms, **Br = mu0 Mr**, also called the **retentivity**. The material now acts as a **permanent magnet**.
-- **Point 5, coercive field**: apply a **reverse** field. The field needed to bring the magnetization back to zero is the **coercivity Hc**.
+- **Point 4, remanence**: reduce H to zero. Domain walls resist moving back, so many domains stay aligned and a **remanent magnetization $M_r$** remains. In B terms, **$B_r$ = $\mu_0$ $M_r$**, also called the **retentivity**. The material now acts as a **permanent magnet**.
+- **Point 5, coercive field**: apply a **reverse** field. The field needed to bring the magnetization back to zero is the **coercivity $H_c$**.
 - Increase the reverse field further and the material saturates in the opposite direction. Cycle the field and the curve closes into the **hysteresis loop**.
 
 ### M-H loop vs B-H loop
 
 | | M-H loop (Fig 20-7a) | B-H loop (Fig 20-7b) |
 |---|---|---|
-| Saturates? | **Yes**, flat at Ms | **No**, keeps rising |
-| Why | M cannot exceed all dipoles aligned | B = mu0 H + mu0 M keeps growing with H even after M is maximum |
-| Remanence | Mr | Br = mu0 Mr |
+| Saturates? | **Yes**, flat at $M_s$ | **No**, keeps rising |
+| Why | M cannot exceed all dipoles aligned | B = $\mu_0$ H + $\mu_0$ M keeps growing with H even after M is maximum |
+| Remanence | $M_r$ | $B_r$ = $\mu_0$ $M_r$ |
 
 ### What the loop area means
 
-The **area inside the loop** equals the **energy lost per cycle per unit volume**, dissipated as heat as the domain walls are dragged back and forth. The **shaded rectangle** in Fig 20-7(b) is the largest B x H product in the second quadrant: the **power of the magnet**, (BH)max (see [Soft vs Hard](02_7_soft_vs_hard.html)).
+The **area inside the loop** equals the **energy lost per cycle per unit volume**, dissipated as heat as the domain walls are dragged back and forth. The **shaded rectangle** in Fig 20-7(b) is the largest B × H product in the second quadrant: the **power of the magnet**, $(BH)_{max}$ (see [Soft vs Hard](02_7_soft_vs_hard.html)).
 
 ### Why the shape matters
 
@@ -63,8 +63,8 @@ The **area inside the loop** equals the **energy lost per cycle per unit volume*
 
 :::key
 - The loop exists because domain-wall motion is **irreversible**: M lags behind H.
-- Key points: **saturation (Ms, Bs)**, **remanence (Mr, Br)**, **coercivity (Hc)**.
-- **M saturates, B does not**, because B = mu0(H + M).
+- Key points: **saturation ($M_s$, $B_s$)**, **remanence ($M_r$, $B_r$)**, **coercivity ($H_c$)**.
+- **M saturates, B does not**, because B = $\mu_0$(H + M).
 - **Loop area = energy lost per cycle** (heat).
 - Loop shape decides use: narrow = soft, wide = hard, square = memory.
 :::
@@ -77,25 +77,25 @@ The **area inside the loop** equals the **energy lost per cycle per unit volume*
 :::
 
 :::exam
-- *"Write a note on the ferromagnetic hysteresis B-H loop"* (assignment question, 8-10 marks). Write the definition, draw a large labelled loop (origin, virgin curve, +Bs, Br, -Hc, -Bs, -Br, +Hc, arrows), explain the four acts with domains, then the loop area and the significance of loop shape.
+- *"Write a note on the ferromagnetic hysteresis B-H loop"* (assignment question, 8-10 marks). Write the definition, draw a large labelled loop (origin, virgin curve, +$B_s$, $B_r$, -Hc, -Bs, -Br, +$H_c$, arrows), explain the four acts with domains, then the loop area and the significance of loop shape.
 - Short: *"Define retentivity and coercivity."*
 :::
 
 :::def
-The **hysteresis loop** is the closed B-H (or M-H) curve traced by a ferromagnetic material as the applied field is cycled. Starting from the demagnetised state, domain growth and rotation take the material to **saturation (Bs)**; on removing the field a **remanent induction (Br)** remains; a reverse **coercive field (Hc)** is needed to reduce B to zero. B lags behind H because domain-wall motion is irreversible, and the **area of the loop** equals the energy dissipated per cycle per unit volume.
+The **hysteresis loop** is the closed B-H (or M-H) curve traced by a ferromagnetic material as the applied field is cycled. Starting from the demagnetised state, domain growth and rotation take the material to **saturation ($B_s$)**; on removing the field a **remanent induction ($B_r$)** remains; a reverse **coercive field ($H_c$)** is needed to reduce B to zero. B lags behind H because domain-wall motion is irreversible, and the **area of the loop** equals the energy dissipated per cycle per unit volume.
 :::
 
 ## Quick Check
 
 :::q Q1 · What is the magnetization of a ferromagnet at H = 0 after it has been saturated?
 :::ans
-It equals the **remanence Mr** (Br in B terms), not zero, because the domain walls do not all move back.
+It equals the **remanence $M_r$** ($B_r$ in B terms), not zero, because the domain walls do not all move back.
 :::
 :::
 
 :::q Q2 · Why does the B-H loop keep rising beyond saturation while the M-H loop goes flat?
 :::ans
-Because **B = mu0 H + mu0 M**. Once M is at its maximum Ms, the mu0 H term still grows with H, so B keeps rising.
+Because **B = $\mu_0$ H + $\mu_0$ M**. Once M is at its maximum $M_s$, the $\mu_0$ H term still grows with H, so B keeps rising.
 :::
 :::
 

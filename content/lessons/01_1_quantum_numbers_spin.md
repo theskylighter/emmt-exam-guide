@@ -9,7 +9,7 @@ Almost every element has dozens of electrons, and every electron is a moving cha
 Early in the 20th century physicists found that an electron cannot sit just anywhere: it has an **address** of four numbers. In **1925** Uhlenbeck and Goudsmit added the strangest one: the electron behaves as if it **spins**, and a spinning charge is a **tiny magnet**.
 
 :::analogy
-A block of flats. **n** is the floor, **l** the type of flat (s, p, d, f), **m_l** the particular flat, and **m_s** which of the two beds the resident sleeps in, head up or head down. Two residents in one flat always sleep head-to-toe (opposite spins), so their "magnets" cancel.
+A block of flats. **n** is the floor, **l** the type of flat (s, p, d, f), **$m_l$** the particular flat, and **$m_s$** which of the two beds the resident sleeps in, head up or head down. Two residents in one flat always sleep head-to-toe (opposite spins), so their "magnets" cancel.
 :::
 
 ## How It Works
@@ -18,8 +18,8 @@ A block of flats. **n** is the floor, **l** the type of flat (s, p, d, f), **m_l
 |---|---|---|---|---|
 | Principal | n | 1, 2, 3 ... (K, L, M ...) | shell: size and energy | |
 | Azimuthal | l | 0 to n-1 (s, p, d, f) | sub-shell shape | a **d** sub-shell (l = 2) holds 10 electrons, room for up to 5 unpaired |
-| Magnetic | m_l | -l to +l | orbital orientation | orbital moment (largely quenched in solids) |
-| Spin | m_s | +1/2 or -1/2 | spin up or down | **the source of the moment**, one Bohr magneton |
+| Magnetic | $m_l$ | -l to +l | orbital orientation | orbital moment (largely quenched in solids) |
+| Spin | $m_s$ | +1/2 or -1/2 | spin up or down | **the source of the moment**, one Bohr magneton |
 
 ### The three filling rules
 
@@ -49,7 +49,7 @@ Manganese has **5** unpaired spins but is **antiferromagnetic**. Only in Fe, Co 
 Ferrites, the ceramic magnets in high-frequency transformers, have the **spinel structure AB2O4** (midsem, Raghavan). In an **inverse spinel** such as Fe3O4, ions on the two kinds of site point their moments **opposite but unequally**, giving **ferrimagnetism**.
 
 :::key
-- Four quantum numbers: **n, l, m_l, m_s**; spin (m_s) gives the magnetic moment.
+- Four quantum numbers: **n, l, $m_l$, $m_s$**; spin ($m_s$) gives the magnetic moment.
 - **Pauli**: paired electrons have opposite spins and cancel.
 - **Hund**: spread out with parallel spins first, maximising unpaired electrons.
 - Fe 4, Co 3, Ni 2 unpaired 3d electrons; Cu 0.
@@ -65,7 +65,7 @@ Ferrites, the ceramic magnets in high-frequency transformers, have the **spinel 
 :::
 
 :::def
-The **four quantum numbers** (principal n, azimuthal l, magnetic m_l, spin m_s) specify the state of an electron in an atom. The spin quantum number m_s = +1/2 or -1/2 gives each electron an intrinsic magnetic moment of one Bohr magneton. By the Pauli principle paired electrons have opposite spins and cancel, and by Hund's rule electrons occupy a sub-shell singly with parallel spins first, so atoms with partly filled d or f sub-shells carry net magnetic moments.
+The **four quantum numbers** (principal n, azimuthal l, magnetic $m_l$, spin $m_s$) specify the state of an electron in an atom. The spin quantum number $m_s$ = +1/2 or -1/2 gives each electron an intrinsic magnetic moment of one Bohr magneton. By the Pauli principle paired electrons have opposite spins and cancel, and by Hund's rule electrons occupy a sub-shell singly with parallel spins first, so atoms with partly filled d or f sub-shells carry net magnetic moments.
 :::
 
 ## Quick Check

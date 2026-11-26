@@ -41,7 +41,7 @@ Two rooms joined by a doorway. The p-room has empty seats (holes), the n-room ha
 |---|---|
 | **Depletion region** | thin layer around the junction with **no mobile carriers**, only fixed ions |
 | **Built-in field E** | points from the **n-side (+ ions) to the p-side (- ions)** |
-| **Barrier potential V0** | the "hill" a carrier must climb to cross: about **0.7 V for Si**, 0.3 V for Ge |
+| **Barrier potential $V_0$** | the "hill" a carrier must climb to cross: about **0.7 V for Si**, 0.3 V for Ge |
 | **Equilibrium** | diffusion (pushing carriers across) exactly balances drift (the field pushing them back) |
 
 Callister's Figure 12.20(a) shows the same junction with no voltage applied: holes on the p-side, electrons on the n-side.
@@ -55,7 +55,7 @@ Callister is explicit: the junction is made from **one piece of single-crystal s
 :::key
 - p-side: majority holes. n-side: majority electrons.
 - Diffusion and recombination create a **depletion region** of fixed ions.
-- The fixed ions make a **built-in field (n to p)** and a **barrier V0** (about 0.7 V in Si).
+- The fixed ions make a **built-in field (n to p)** and a **barrier $V_0$** (about 0.7 V in Si).
 - The junction must be inside **one single crystal**.
 :::
 
@@ -66,7 +66,7 @@ Callister is explicit: the junction is made from **one piece of single-crystal s
 :::
 
 :::exam
-- Usually the first part of *"Explain the construction and working of a p-n junction diode."* Write the formation steps, draw the depletion region, and state V0.
+- Usually the first part of *"Explain the construction and working of a p-n junction diode."* Write the formation steps, draw the depletion region, and state $V_0$.
 - Short questions: *"What is a depletion region?"*, *"Why is a single crystal used?"*
 :::
 

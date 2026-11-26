@@ -1,20 +1,20 @@
 **A full mock endsem paper mixing every topic, about 80% new material and 20% midsem.** The marks and timings are assumptions for practice; your real paper may differ.
 
 :::note
-**Suggested format:** 3 hours, 60 marks. Section A: answer all (10 x 2 = 20). Section B: any two of three (2 x 10 = 20). Section C: any two of three (2 x 10 = 20). Time yourself, write on paper, then compare with the outlines.
+**Suggested format:** 3 hours, 60 marks. Section A: answer all (10 × 2 = 20). Section B: any two of three (2 × 10 = 20). Section C: any two of three (2 × 10 = 20). Time yourself, write on paper, then compare with the outlines.
 :::
 
 ## Section A · Short Answers (10 x 2 marks)
 
 :::q A1 · Define coercivity and retentivity.
 :::ans
-**Coercivity Hc**: reverse field needed to reduce B to zero. **Retentivity (remanence) Br**: induction remaining at H = 0 after saturation.
+**Coercivity $H_c$**: reverse field needed to reduce B to zero. **Retentivity (remanence) $B_r$**: induction remaining at H = 0 after saturation.
 :::
 :::
 
 :::q A2 · State the Curie-Weiss law.
 :::ans
-chi = C/(T - Tc), valid above the Curie temperature.
+$\chi$ = C/(T - $T_c$), valid above the Curie temperature.
 :::
 :::
 
@@ -24,9 +24,9 @@ Its 3d shell is full, so all spins pair and cancel; the only response is the ind
 :::
 :::
 
-:::q A4 · What is (BH)max?
+:::q A4 · What is $(BH)_{max}$?
 :::ans
-The largest B x H rectangle that fits in the second quadrant of the B-H loop; a measure of a permanent magnet's power.
+The largest B × H rectangle that fits in the second quadrant of the B-H loop; a measure of a permanent magnet's power.
 :::
 :::
 
@@ -42,9 +42,9 @@ An abrupt rise in reverse current at a large reverse voltage, when large numbers
 :::
 :::
 
-:::q A7 · Give the relation between alpha and beta of a transistor.
+:::q A7 · Give the relation between $\alpha$ and $\beta$ of a transistor.
 :::ans
-beta = alpha / (1 - alpha), from I_E = I_B + I_C.
+$\beta = \alpha/(1 - \alpha)$, from $I_E = I_B + I_C$.
 :::
 :::
 
@@ -76,7 +76,7 @@ See [Hysteresis](02_5_hysteresis.html): definition, labelled loop, four acts wit
 
 :::q B2 · (a) Differentiate soft and hard magnetic materials. (6) (b) Define Curie temperature and explain the effect of temperature on the hysteresis loop. (4)
 :::ans
-(a) [Soft vs Hard](02_7_soft_vs_hard.html) table with loops. (b) [Curie Temperature](02_6_curie_temperature.html): definition, shrinking loops, remanence falls to zero at Tc.
+(a) [Soft vs Hard](02_7_soft_vs_hard.html) table with loops. (b) [Curie Temperature](02_6_curie_temperature.html): definition, shrinking loops, remanence falls to zero at $T_c$.
 :::
 :::
 
@@ -100,8 +100,8 @@ Follow [Junction Transistor](04_3_bjt.html) with electrons in place of holes: em
 :::
 :::
 
-:::q C3 · (a) Explain the construction and working of a silicon solar cell. (5) (b) Draw its J-V characteristics, and find the efficiency of a cell with Voc = 0.65 V, Jsc = 38 mA/cm2 and FF = 0.8 under 100 mW/cm2. (5)
+:::q C3 · (a) Explain the construction and working of a silicon solar cell. (5) (b) Draw its J-V characteristics, and find the efficiency of a cell with $V_{oc}$ = 0.65 V, $J_{sc}$ = 38 mA/cm² and FF = 0.8 under 100 mW/cm². (5)
 :::ans
-(a) [Solar Cell](04_5_solar_cell.html). (b) [J-V Characteristics](04_6_solar_jv.html); eta = 0.8 x 0.65 x 38 / 100 = 19.76 / 100 = **19.8%**.
+(a) [Solar Cell](04_5_solar_cell.html). (b) [J-V Characteristics](04_6_solar_jv.html); $\eta = 0.8 \times 0.65 \times 38/100 = 19.76/100 =$ **19.8%**.
 :::
 :::
