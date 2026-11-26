@@ -12,6 +12,7 @@ web/node_modules/
 web/src/data/lessons.json
 web/src/data/search.json
 web/public/figures/
+web/public/anim/
 
 # Python
 __pycache__/

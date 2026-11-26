@@ -10,6 +10,7 @@ Supported syntax
                              example, summary, q, ans, raw
   <<SVG:name>>               inline ``content/diagrams/name.svg``
   <<SVG:name:compact>>       compact inline diagram wrapper
+  <<ANIM:name>>              animated explainer ``content/animations/name.html`` (iframe)
   `code` **bold** *italic* [link](url)
 """
 from __future__ import annotations
@@ -277,6 +278,14 @@ def _svg_include(name: str, compact: bool = False) -> str:
     return f'<div class="{wrapper_class}" tabindex="0" role="region" aria-label="Diagram">{path.read_text(encoding="utf-8")}</div>'
 
 
+def _anim_include(name: str) -> str:
+    path = DIAGRAMS_DIR.parent / "animations" / f"{name}.html"
+    if not path.exists():
+        raise FileNotFoundError(f"missing animation: {path}")
+    return (f'<div class="animwrap"><iframe src="/anim/{name}.html" title="Animation: {name}" '
+            f'loading="lazy"></iframe></div>')
+
+
 # --------------------------------------------------------------------------- blocks
 
 
@@ -324,6 +333,13 @@ def render_blocks(lines: list[str], ctx: RenderContext) -> str:
                 raise ValueError(f"unclosed container near: {line[:70]!r}")
             out.append(_render_container(kind, title.strip(), lines[i + 1:j], ctx))
             i = j + 1
+            continue
+
+        m = re.match(r"^<<ANIM:(\w+)>>$", s)
+        if m:
+            flush()
+            out.append(_anim_include(m.group(1)))
+            i += 1
             continue
 
         m = re.match(r"^<<SVG:(\w+)(:compact)?>>$", s)

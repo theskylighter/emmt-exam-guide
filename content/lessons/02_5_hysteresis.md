@@ -36,6 +36,10 @@ Start with an unmagnetised (**virgin**) sample at the origin.
 
 <<SVG:askeland_fig20_7>>
 
+**Watch it happen.** Press Play, or step through with Next. The dot traces the loop while the domains on the right show *why* B changes at each point. The last frame is the diagram you draw in the exam.
+
+<<ANIM:hysteresis>>
+
 - **Point 3, saturation**: as above.
 - **Point 4, remanence**: reduce H to zero. Domain walls resist moving back, so many domains stay aligned and a **remanent magnetization $M_r$** remains. In B terms, **$B_r$ = $\mu_0$ $M_r$**, also called the **retentivity**. The material now acts as a **permanent magnet**.
 - **Point 5, coercive field**: apply a **reverse** field. The field needed to bring the magnetization back to zero is the **coercivity $H_c$**.

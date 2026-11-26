@@ -59,10 +59,11 @@ def export(course: Course | None = None, out_file: Path = config.WEB_DATA_FILE,
 
 
 def copy_figures() -> None:
-    """Copy content/figures (textbook figure PNGs) to web/public/figures, served at /figures/."""
-    src, dst = config.CONTENT_DIR / "figures", config.WEB_DIR / "public" / "figures"
-    if not src.is_dir():
-        return
-    if dst.exists():
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst)
+    """Copy content/figures (textbook PNGs) and content/animations (explainer HTML) into web/public,
+    served at /figures/ and /anim/."""
+    for name, served in (("figures", "figures"), ("animations", "anim")):
+        src, dst = config.CONTENT_DIR / name, config.WEB_DIR / "public" / served
+        if dst.exists():
+            shutil.rmtree(dst)
+        if src.is_dir():
+            shutil.copytree(src, dst)

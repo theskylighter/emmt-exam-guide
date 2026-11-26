@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation: the hysteresis loop and magnetic domains</title>
+<!--
+  Stepped explainer (explainer-visuals pattern "Process/Flow -> stepped animation with scrubber").
+  One global progress value t in [0,1] drives everything: the dot on the B-H loop, the traced
+  path, the point labels, the applied-field arrow, every domain arrow and the net-M arrow.
+  So scrubbing, stepping and playing can never disagree with each other.
+  Embedded by the study site with <<ANIM:hysteresis>> (an iframe); also works opened directly.
+-->
+<style>
+  :root {
+    --bg: #ffffff; --panel: #f7f7f9; --fg: #18181b; --muted: #63636b; --line: #e4e4e7;
+    --plus: #2563eb; --minus: #ea580c; --ghost: #c4c4cc; --soft: rgba(37, 99, 235, .10);
+  }
+  html.dark {
+    --bg: #0f1013; --panel: #17181d; --fg: #ececef; --muted: #a1a1aa; --line: #27272d;
+    --plus: #7aa2ff; --minus: #fb923c; --ghost: #45454d; --soft: rgba(122, 162, 255, .12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #root { padding: 14px; }
+  .panels { display: flex; flex-wrap: wrap; gap: 12px; }
+  .panel { flex: 1 1 300px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px; }
+  .panel h3 { font-size: 13px; font-weight: 600; color: var(--muted); padding: 4px 6px 0; letter-spacing: .02em; }
+  svg { display: block; width: 100%; height: auto; }
+  svg text { fill: var(--fg); font-family: inherit; }
+  .axis { stroke: var(--muted); stroke-width: 1.2; }
+  .ghost { fill: none; stroke: var(--ghost); stroke-width: 1.5; stroke-dasharray: 4 4; }
+  .trace { fill: none; stroke: var(--plus); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .area { fill: var(--soft); opacity: 0; transition: opacity .5s; }
+  .area.on { opacity: 1; }
+  .dot { fill: var(--minus); stroke: var(--bg); stroke-width: 2; }
+  .pt { opacity: 0; transition: opacity .35s; }
+  .pt.on { opacity: 1; }
+  .pt circle { fill: var(--fg); }
+  .pt text { font-size: 14px; font-weight: 700; }
+  .small { font-size: 12px; fill: var(--muted) !important; }
+  .cell rect { stroke: var(--line); stroke-width: 1; transition: stroke .3s; }
+  .cell.flash rect { stroke: var(--fg); stroke-width: 2.5; }
+  .arrow { stroke-width: 3; stroke-linecap: round; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+  button {
+    font: inherit; font-size: 14px; color: var(--fg); background: var(--panel); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer; min-height: 36px;
+  }
+  button:hover { border-color: var(--plus); }
+  button.primary { background: var(--plus); border-color: var(--plus); color: #fff; min-width: 76px; }
+  html.dark button.primary { color: #0f1013; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--plus); outline-offset: 2px; }
+  input[type=range] { flex: 1 1 160px; accent-color: var(--plus); min-height: 36px; }
+  .caption { margin-top: 10px; padding: 10px 12px; border-left: 3px solid var(--plus); background: var(--panel); border-radius: 0 8px 8px 0; min-height: 66px; }
+  .caption .n { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="root">
+  <figure role="group" aria-label="Animated hysteresis loop with magnetic domains">
+    <div class="panels">
+      <div class="panel">
+        <h3>B-H loop</h3>
+        <svg id="plot" viewBox="0 0 380 330" role="img" aria-label="B against H, traced as the field is cycled">
+          <defs>
+            <marker id="ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="color: var(--muted)"></path>
+            </marker>
+          </defs>
+          <path id="area" class="area"></path>
+          <line class="axis" x1="22" y1="165" x2="362" y2="165" marker-end="url(#ax)"></line>
+          <line class="axis" x1="190" y1="315" x2="190" y2="14" marker-end="url(#ax)"></line>
+          <text x="352" y="186" font-size="15" font-weight="700">H</text>
+          <text x="200" y="22" font-size="15" font-weight="700">B</text>
+          <path id="ghost" class="ghost"></path>
+          <polyline id="trace" class="trace"></polyline>
+          <g id="pts"></g>
+          <circle id="dot" class="dot" r="7"></circle>
+        </svg>
+      </div>
+      <div class="panel">
+        <h3>Inside the material: domains</h3>
+        <svg id="dom" viewBox="0 0 380 330" role="img" aria-label="Twenty magnetic domains whose arrows turn as the field changes">
+          <text x="20" y="30" class="small">applied field H</text>
+          <line x1="190" y1="22" x2="190" y2="50" stroke="var(--line)" stroke-width="1"></line>
+          <line id="hArrow" class="arrow" x1="190" y1="36" x2="190" y2="36" stroke="var(--minus)"></line>
+          <polygon id="hHead" fill="var(--minus)"></polygon>
+          <text id="hText" x="360" y="30" class="small" text-anchor="end"></text>
+          <g id="cells"></g>
+          <text x="20" y="318" class="small">net M</text>
+          <line x1="190" y1="300" x2="190" y2="326" stroke="var(--line)" stroke-width="1"></line>
+          <line id="mArrow" class="arrow" x1="190" y1="313" x2="190" y2="313" stroke="var(--plus)"></line>
+          <polygon id="mHead" fill="var(--plus)"></polygon>
+        </svg>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="restart" type="button" aria-label="Restart">Restart</button>
+      <button id="back" type="button" aria-label="Previous step">Back</button>
+      <button id="play" type="button" class="primary">Play</button>
+      <button id="next" type="button" aria-label="Next step">Next</button>
+      <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Scrub through the cycle">
+    </div>
+    <div class="caption" aria-live="polite"><div class="n" id="stepNo"></div><div id="capText"></div></div>
+    <figcaption class="visually-hidden">
+      A ferromagnet starts unmagnetized with randomly oriented domains. Increasing H makes aligned domains grow by
+      Bloch-wall motion and then rotates the rest, reaching saturation Bs. Removing H leaves remanence Br.
+      A reverse field equal to the coercivity Hc brings B to zero; a larger reverse field saturates it at -Bs.
+      Cycling back closes the loop, whose area is the energy lost per cycle.
+    </figcaption>
+  </figure>
+</div>
+<script>
+(() => {
+  // ---------- physics shape of the loop (normalised: H, B in [-1, 1]) ----------
+  const HC = 0.35, W = 0.26;
+  const E = -1 - Math.tanh(-(1 - HC) / W);                       // makes both branches meet the tips exactly
+  const Bdown = (H) => Math.tanh((H + HC) / W) + E * (1 - H) / 2; // +Bs -> Br -> -Hc -> -Bs
+  const Bup = (H) => Math.tanh((H - HC) / W) - E * (1 + H) / 2;   // -Bs -> -Br -> +Hc -> +Bs
+  const Bv = (H) => (Math.tanh((H - 0.28) / 0.17) + Math.tanh(0.28 / 0.17)) /
+                    (Math.tanh(0.72 / 0.17) + Math.tanh(0.28 / 0.17)); // S-shaped first magnetisation
+  const X = (H) => 190 + H * 150, Y = (B) => 165 - B * 125;
+
+  // Seven segments of the cycle: field path, branch, relative duration.
+  const SEG = [
+    { w: 2, H: (q) => q,                 B: Bv },
+    { w: 1, H: (q) => 1 - q,             B: Bdown },
+    { w: 1, H: (q) => -HC * q,           B: Bdown },
+    { w: 1, H: (q) => -HC - (1 - HC) * q, B: Bdown },
+    { w: 1, H: (q) => -1 + q,            B: Bup },
+    { w: 1, H: (q) => HC * q,            B: Bup },
+    { w: 1, H: (q) => HC + (1 - HC) * q, B: Bup },
+  ];
+  const TOTAL = SEG.reduce((s, g) => s + g.w, 0);
+  const segStart = []; { let a = 0; for (const g of SEG) { segStart.push(a / TOTAL); a += g.w; } }
+  const locate = (t) => {
+    let i = SEG.length - 1;
+    while (i > 0 && t < segStart[i] - 1e-9) i--;
+    const q = Math.min(1, (t - segStart[i]) / (SEG[i].w / TOTAL));
+    return { i, q };
+  };
+  const at = (t) => { const { i, q } = locate(t); const H = SEG[i].H(q); return { H, B: SEG[i].B(H) }; };
+
+  // Steps (where Next/Back stop) and the caption for the interval ending at each stop.
+  const S1W = SEG[0].w / TOTAL;
+  const WALL_END = 0.4;                         // virgin curve reaches B = 0.8 here; rotation finishes the rest
+  const STOPS = [0, WALL_END * S1W, ...segStart.slice(1), 1];
+  const CAP = [
+    "Start: the material is unmagnetised. Each domain points along one of iron's easy axes, in random directions, so they cancel: H = 0 and B = 0.",
+    "Small H: domains already pointing along H grow at the expense of their neighbours as Bloch walls move. B rises slowly at first, then fast.",
+    "Large H: the walls have finished moving and the last domains rotate into line. Saturation Bs: every dipole is aligned.",
+    "Remove the field (H = 0): the walls do not all move back (the motion is irreversible), so most domains stay aligned. Remanence Br: the material is now a magnet.",
+    "Reverse the field: at H = -Hc half the domains point each way and B = 0. That reverse field is the coercivity Hc.",
+    "Increase the reverse field: all domains reverse, and the material saturates the other way at -Bs.",
+    "Remove the field again: B stays at -Br, a magnet pointing the opposite way.",
+    "Apply a forward field: at +Hc, B passes through zero again.",
+    "Back to +Bs: the loop is closed. Its area is the energy lost as heat in every cycle (hysteresis loss). Narrow loop: soft magnet. Wide loop: hard magnet.",
+  ];
+
+  // ---------- domains: 5 x 4 cells, angle 0 = along +H ----------
+  const A0 = [0, 90, 180, -90, 90, 180, -90, 0, 90, 180, -90, 0, 90, 180, -90, 90, 180, -90, 0, 0];
+  const RELAX = [1, 14];                       // the two that relax back after saturation
+  const F1 = [0, 3, 5, 7, 8, 11, 13, 18, 19];  // reverse first (segments 3 and 7)
+  const F2 = [2, 4, 6, 9, 10, 12, 15, 16, 17]; // reverse first (segments 4 and 6)
+  const snaps = (ids, to, span) => ids.map((id, k) => ({ id, to, mode: "snap", ts: ((k + 1) / ids.length) * span }));
+  // Per segment: which cells change, to what, and how (snap = wall sweeps past it; rotate = moment turns).
+  const CHANGES = [
+    [...snaps([5, 13, 3, 8, 16, 10, 2, 17, 9, 4, 15], 0, WALL_END),
+     ...[1, 12, 6, 14].map((id) => ({ id, to: 0, mode: "rotate", ts: WALL_END }))],
+    [{ id: 1, to: 90, mode: "rotate", ts: 0 }, { id: 14, to: -90, mode: "rotate", ts: 0 }],
+    snaps(F1, 180, 0.95),
+    [...snaps(F2, 180, 0.6), { id: 1, to: 180, mode: "rotate", ts: 0.6 }, { id: 14, to: -180, mode: "rotate", ts: 0.6 }],
+    [{ id: 1, to: 90, mode: "rotate", ts: 0 }, { id: 14, to: -90, mode: "rotate", ts: 0 }],
+    snaps(F2, 0, 0.95),
+    [...snaps(F1, 0, 0.6), { id: 1, to: 0, mode: "rotate", ts: 0.6 }, { id: 14, to: 0, mode: "rotate", ts: 0.6 }],
+  ];
+  const startStates = [A0.slice()];
+  CHANGES.forEach((ch, i) => { const s = startStates[i].slice(); ch.forEach((c) => (s[c.id] = c.to)); startStates.push(s); });
+  const anglesAt = (t) => {
+    const { i, q } = locate(t);
+    const a = startStates[i].slice();
+    for (const c of CHANGES[i]) {
+      const from = startStates[i][c.id];
+      if (c.mode === "snap") a[c.id] = q > c.ts - 1e-9 && q > 0 ? c.to : from; // never flipped at a segment's first instant
+      else { const k = Math.max(0, Math.min(1, (q - c.ts) / (1 - c.ts))); a[c.id] = from + (c.to - from) * k; }
+    }
+    return a;
+  };
+
+  // ---------- build static SVG parts ----------
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+  const $ = (id) => document.getElementById(id);
+
+  const sample = (from, to, n = 240) => { const p = []; for (let k = 0; k <= n; k++) { const v = at(from + (to - from) * k / n); p.push([X(v.H), Y(v.B)]); } return p; };
+  const toD = (pts) => "M" + pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" L");
+  $("ghost").setAttribute("d", toD(sample(0, 1)));
+  $("area").setAttribute("d", toD(sample(segStart[1], 1)) + " Z");
+  const TRACE = sample(0, 1, 900);
+
+  const PTS = [
+    { t: segStart[1], H: 1, B: 1, label: "Bs", dx: 10, dy: -6 },
+    { t: segStart[2], H: 0, B: Bdown(0), label: "Br", dx: -30, dy: -8 },
+    { t: segStart[3], H: -HC, B: 0, label: "-Hc", dx: -40, dy: -10 },
+    { t: segStart[4], H: -1, B: -1, label: "-Bs", dx: -12, dy: 24 },
+    { t: segStart[5], H: 0, B: Bup(0), label: "-Br", dx: 8, dy: 22 },
+    { t: segStart[6], H: HC, B: 0, label: "Hc", dx: 8, dy: 22 },
+  ].map((p) => { const g = el("g", { class: "pt" }, $("pts")); el("circle", { cx: X(p.H), cy: Y(p.B), r: 4 }, g); const tx = el("text", { x: X(p.H) + p.dx, y: Y(p.B) + p.dy }, g); tx.textContent = p.label; return { ...p, g }; });
+
+  const cells = A0.map((_, k) => {
+    const cx = 70 + (k % 5) * 60, cy = 92 + Math.floor(k / 5) * 52;
+    const g = el("g", { class: "cell" }, $("cells"));
+    const rect = el("rect", { x: cx - 30, y: cy - 26, width: 60, height: 52 }, g);
+    const arrow = el("g", {}, g);
+    const shaft = el("line", { x1: -17, y1: 0, x2: 12, y2: 0, class: "arrow" }, arrow);
+    const head = el("polygon", { points: "19,0 9,-7 9,7" }, arrow);
+    return { g, rect, arrow, shaft, head, cx, cy, last: null };
+  });
+
+  // ---------- render one frame from t ----------
+  const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const hArrow = (lineId, headId, y, value, color) => {
+    const x2 = 190 + value * 150, dir = Math.sign(value) || 1;
+    const show = Math.abs(value) > 0.03;
+    $(lineId).setAttribute("x2", x2); $(lineId).setAttribute("stroke", color); $(lineId).setAttribute("stroke-opacity", show ? 1 : 0);
+    $(headId).setAttribute("points", show ? `${x2 + dir * 8},${y} ${x2 - dir * 4},${y - 7} ${x2 - dir * 4},${y + 7}` : "");
+    $(headId).setAttribute("fill", color);
+  };
+  let T = 0;
+  function render(t, fromUser) {
+    T = Math.max(0, Math.min(1, t));
+    const { H, B } = at(T);
+    $("dot").setAttribute("cx", X(H)); $("dot").setAttribute("cy", Y(B));
+    const n = Math.round(T * (TRACE.length - 1));
+    $("trace").setAttribute("points", TRACE.slice(0, n + 1).map((p) => p.join(",")).join(" "));
+    PTS.forEach((p) => p.g.classList.toggle("on", T >= p.t - 1e-6));
+    $("area").classList.toggle("on", T >= 1 - 1e-6);
+
+    const plus = css("--plus"), minus = css("--minus"), muted = css("--muted");
+    hArrow("hArrow", "hHead", 36, H, minus);
+    $("hText").textContent = Math.abs(H) < 0.005 ? "H = 0" : (H > 0 ? "H forward" : "H reversed");
+    const ang = anglesAt(T);
+    let m = 0;
+    cells.forEach((c, k) => {
+      const a = ang[k], cos = Math.cos(a * Math.PI / 180);
+      m += cos;
+      c.arrow.setAttribute("transform", `translate(${c.cx},${c.cy}) rotate(${-a})`);
+      const col = cos > 0.5 ? plus : cos < -0.5 ? minus : muted;
+      c.shaft.setAttribute("stroke", col); c.head.setAttribute("fill", col);
+      c.rect.setAttribute("fill", cos >= 0 ? `color-mix(in srgb, ${plus} ${Math.round(6 + 24 * cos)}%, transparent)`
+                                            : `color-mix(in srgb, ${minus} ${Math.round(6 - 24 * cos)}%, transparent)`);
+      // A domain that flips by wall motion gets a brief outline, so the eye catches the wall passing.
+      if (c.last !== null && Math.abs(c.last - a) >= 90 && !fromUser) {
+        c.g.classList.add("flash"); setTimeout(() => c.g.classList.remove("flash"), 380);
+      }
+      c.last = a;
+    });
+    hArrow("mArrow", "mHead", 313, m / cells.length, plus);
+
+    let s = 0; while (s < STOPS.length - 1 && T > STOPS[s] + 1e-6) s++;
+    $("stepNo").textContent = `Step ${s + 1} of ${STOPS.length}`;
+    $("capText").textContent = CAP[s];
+    $("scrub").value = Math.round(T * 1000);
+  }
+
+  // ---------- controls ----------
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let playing = false, raf = 0, hold = 0, lastTs = 0;
+  const SPEED = 1 / 14;                         // whole cycle in about 14 s of motion
+  const setPlay = (on) => { playing = on; $("play").textContent = on ? "Pause" : "Play"; if (on) { lastTs = 0; raf = requestAnimationFrame(tick); } else cancelAnimationFrame(raf); };
+  function tick(ts) {
+    if (!playing) return;
+    const dt = lastTs ? (ts - lastTs) / 1000 : 0; lastTs = ts;
+    if (hold > 0) { hold -= dt; raf = requestAnimationFrame(tick); return; }
+    if (reduce) { hold = 2.2; const nx = STOPS.find((s) => s > T + 1e-6); if (nx === undefined) return setPlay(false); render(nx, true); raf = requestAnimationFrame(tick); return; }
+    const before = T, after = Math.min(1, T + dt * SPEED);
+    const crossed = STOPS.find((s) => s > before + 1e-6 && s <= after);
+    render(crossed !== undefined ? crossed : after);
+    if (crossed !== undefined) hold = 1.1;      // pause briefly on each labelled point
+    if (T >= 1) return setPlay(false);
+    raf = requestAnimationFrame(tick);
+  }
+  $("play").onclick = () => { if (!playing && T >= 1) render(0, true); setPlay(!playing); };
+  $("next").onclick = () => { setPlay(false); const nx = STOPS.find((s) => s > T + 1e-6); render(nx === undefined ? 1 : nx); };
+  $("back").onclick = () => { setPlay(false); const pv = [...STOPS].reverse().find((s) => s < T - 1e-6); render(pv === undefined ? 0 : pv, true); };
+  $("restart").onclick = () => { setPlay(false); render(0, true); };
+  $("scrub").oninput = (e) => { setPlay(false); render(e.target.value / 1000, true); };
+
+  // ---------- theme (follow the study site when embedded) and auto height ----------
+  const applyTheme = () => {
+    let dark;
+    try { dark = parent !== window && parent.document.documentElement.classList.contains("dark"); } catch { dark = undefined; }
+    if (parent === window || dark === undefined) dark = matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", !!dark);
+    render(T, true);
+  };
+  try { if (parent !== window) new MutationObserver(applyTheme).observe(parent.document.documentElement, { attributes: true, attributeFilter: ["class"] }); } catch {}
+  const fe = window.frameElement;
+  if (fe) new ResizeObserver(() => { fe.style.height = $("root").offsetHeight + "px"; }).observe($("root"));
+  applyTheme();
+})();
+</script>
+</body>
+</html>
