@@ -50,13 +50,13 @@
       <div class="panel">
         <h3>Inside the material: domains</h3>
         <svg id="dom" viewBox="0 0 380 330" role="img" aria-label="Twenty magnetic domains whose arrows turn as the field changes">
-          <text x="20" y="30" class="small">applied field H</text>
-          <line x1="190" y1="22" x2="190" y2="50" stroke="var(--line)" stroke-width="1"></line>
-          <line id="hArrow" class="arrow" x1="190" y1="36" x2="190" y2="36" stroke="var(--minus)"></line>
+          <text x="20" y="18" class="small">applied field H</text>
+          <line x1="190" y1="30" x2="190" y2="58" stroke="var(--line)" stroke-width="1"></line>
+          <line id="hArrow" class="arrow" x1="190" y1="44" x2="190" y2="44" stroke="var(--minus)"></line>
           <polygon id="hHead" fill="var(--minus)"></polygon>
-          <text id="hText" x="360" y="30" class="small" text-anchor="end"></text>
+          <text id="hText" x="360" y="18" class="small" text-anchor="end"></text>
           <g id="cells"></g>
-          <text x="20" y="318" class="small">net M</text>
+          <text x="20" y="294" class="small">net M</text>
           <line x1="190" y1="300" x2="190" y2="326" stroke="var(--line)" stroke-width="1"></line>
           <line id="mArrow" class="arrow" x1="190" y1="313" x2="190" y2="313" stroke="var(--plus)"></line>
           <polygon id="mHead" fill="var(--plus)"></polygon>
@@ -74,23 +74,30 @@
 <script>
 (() => {
   // ---------- physics shape of the loop (normalised: H, B in [-1, 1]) ----------
-  const HC = 0.35, W = 0.26;
-  const E = -1 - Math.tanh(-(1 - HC) / W);                       // makes both branches meet the tips exactly
-  const Bdown = (H) => Math.tanh((H + HC) / W) + E * (1 - H) / 2; // +Bs -> Br -> -Hc -> -Bs
-  const Bup = (H) => Math.tanh((H - HC) / W) - E * (1 + H) / 2;   // -Bs -> -Br -> +Hc -> +Bs
-  const Bv = (H) => (Math.tanh((H - 0.28) / 0.17) + Math.tanh(0.28 / 0.17)) /
+  // M(H) saturates (flat), exactly like Askeland Fig 20-7(a). B = mu0 (H + M) adds a term that
+  // keeps growing with H, so the B-H loop does NOT go flat and has pointed tips (Fig 20-7(b)).
+  const HC = 0.35, W = 0.26, G = 0.35;                            // G: weight of the mu0*H term
+  const E = -1 - Math.tanh(-(1 - HC) / W);                       // makes both M branches meet the tips exactly
+  const Mdown = (H) => Math.tanh((H + HC) / W) + E * (1 - H) / 2; // +Ms -> Mr -> M = 0 -> -Ms
+  const Mup = (H) => Math.tanh((H - HC) / W) - E * (1 + H) / 2;   // -Ms -> -Mr -> M = 0 -> +Ms
+  const Mv = (H) => (Math.tanh((H - 0.28) / 0.17) + Math.tanh(0.28 / 0.17)) /
                     (Math.tanh(0.72 / 0.17) + Math.tanh(0.28 / 0.17)); // S-shaped first magnetisation
+  const toB = (M) => (H) => (M(H) + G * H) / (1 + G);             // B = mu0(H + M), scaled so the tip is B = 1
+  const Bdown = toB(Mdown), Bup = toB(Mup), Bv = toB(Mv);
+  // Coercivity on the B-H loop: the reverse field where B (not M) reaches zero.
+  let lo = -1, hi = 0; for (let k = 0; k < 60; k++) { const mid = (lo + hi) / 2; (Bdown(mid) > 0 ? hi = mid : lo = mid); }
+  const HCB = -(lo + hi) / 2;
   const X = (H) => 190 + H * 150, Y = (B) => 165 - B * 125;
 
   // Seven segments of the cycle: field path, branch, relative duration.
   const SEG = [
     { w: 2, H: (q) => q,                 B: Bv },
     { w: 1, H: (q) => 1 - q,             B: Bdown },
-    { w: 1, H: (q) => -HC * q,           B: Bdown },
-    { w: 1, H: (q) => -HC - (1 - HC) * q, B: Bdown },
+    { w: 1, H: (q) => -HCB * q,          B: Bdown },
+    { w: 1, H: (q) => -HCB - (1 - HCB) * q, B: Bdown },
     { w: 1, H: (q) => -1 + q,            B: Bup },
-    { w: 1, H: (q) => HC * q,            B: Bup },
-    { w: 1, H: (q) => HC + (1 - HC) * q, B: Bup },
+    { w: 1, H: (q) => HCB * q,           B: Bup },
+    { w: 1, H: (q) => HCB + (1 - HCB) * q, B: Bup },
   ];
   const TOTAL = SEG.reduce((s, g) => s + g.w, 0);
   const segStart = []; { let a = 0; for (const g of SEG) { segStart.push(a / TOTAL); a += g.w; } }
@@ -109,9 +116,9 @@
   const CAP = [
     "Start: the material is unmagnetised. Each domain points along one of iron's easy axes, in random directions, so they cancel: H = 0 and B = 0.",
     "Small H: domains already pointing along H grow at the expense of their neighbours as Bloch walls move. B rises slowly at first, then fast.",
-    "Large H: the walls have finished moving and the last domains rotate into line. Saturation Bs: every dipole is aligned.",
+    "Large H: the walls have finished moving and the last domains rotate into line. M is now saturated (every dipole aligned), but B = \u03bc0(H + M) still keeps rising with H, so the B-H curve does not go flat. The tip is Bs (often called Bmax).",
     "Remove the field (H = 0): the walls do not all move back (the motion is irreversible), so most domains stay aligned. Remanence Br: the material is now a magnet.",
-    "Reverse the field: at H = -Hc half the domains point each way and B = 0. That reverse field is the coercivity Hc.",
+    "Reverse the field: at H = -Hc, B falls to zero. That reverse field is the coercivity Hc (at this point M is almost zero too: about half the domains point each way).",
     "Increase the reverse field: all domains reverse, and the material saturates the other way at -Bs.",
     "Remove the field again: B stays at -Br, a magnet pointing the opposite way.",
     "Apply a forward field: at +Hc, B passes through zero again.",
@@ -161,10 +168,10 @@
   const PTS = [
     { t: segStart[1], H: 1, B: 1, label: "Bs", dx: 10, dy: -6 },
     { t: segStart[2], H: 0, B: Bdown(0), label: "Br", dx: -30, dy: -8 },
-    { t: segStart[3], H: -HC, B: 0, label: "-Hc", dx: -40, dy: -10 },
+    { t: segStart[3], H: -HCB, B: 0, label: "-Hc", dx: -40, dy: -10 },
     { t: segStart[4], H: -1, B: -1, label: "-Bs", dx: -12, dy: 24 },
     { t: segStart[5], H: 0, B: Bup(0), label: "-Br", dx: 8, dy: 22 },
-    { t: segStart[6], H: HC, B: 0, label: "Hc", dx: 8, dy: 22 },
+    { t: segStart[6], H: HCB, B: 0, label: "Hc", dx: 8, dy: 22 },
   ].map((p) => { const g = el("g", { class: "pt" }, $("pts")); el("circle", { cx: X(p.H), cy: Y(p.B), r: 4 }, g); const tx = el("text", { x: X(p.H) + p.dx, y: Y(p.B) + p.dy }, g); tx.textContent = p.label; return { ...p, g }; });
 
   const cells = A0.map((_, k) => {
@@ -195,7 +202,7 @@
     $("area").classList.toggle("on", T >= 1 - 1e-6);
 
     const plus = css("--plus"), minus = css("--minus"), muted = css("--muted");
-    hArrow("hArrow", "hHead", 36, H, minus);
+    hArrow("hArrow", "hHead", 44, H, minus);
     $("hText").textContent = Math.abs(H) < 0.005 ? "H = 0" : (H > 0 ? "H forward" : "H reversed");
     const ang = anglesAt(T);
     let m = 0;
