@@ -368,7 +368,7 @@ async function phone(browser) {
 
   // every page must fit the screen width (no sideways scrolling)
   const bad = [], badMath = [], badCells = [];
-  let formulas = 0;
+  let formulas = 0, mathPage = null;
   for (const p of ["/", ...lessons.map((l) => "/" + l.slug)]) {
     await page.goto(BASE + p, { waitUntil: "load" });
     const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -384,12 +384,20 @@ async function phone(browser) {
       }).length,
     }));
     formulas += m.n;
+    if (m.n && !mathPage && p !== "/") mathPage = p;
     if (m.ok !== m.n || m.err.length) badMath.push(`${p} ${m.ok}/${m.n} ${m.err.join(" ; ")}`);
     if (m.cells) badCells.push(`${p} (${m.cells})`);
   }
   check(`phone: no page scrolls sideways (${lessons.length + 1} pages)`, bad.length === 0, bad.slice(0, 5).join(", "));
   check(`math: every formula renders with KaTeX (${formulas} on all pages)`, badMath.length === 0, badMath.slice(0, 3).join(" | "));
   check("tables: no cell shows a stray '|' (cells split correctly)", badCells.length === 0, badCells.slice(0, 5).join(", "));
+  // an old-style link (/slug.html) redirects to /slug; formulas and code buttons must still render after it
+  if (mathPage) {
+    await page.goto(BASE + mathPage + ".html", { waitUntil: "load" });
+    await page.waitForTimeout(300);
+    const d = await page.evaluate(() => ({ path: location.pathname, n: document.querySelectorAll(".math").length, ok: document.querySelectorAll(".math .katex").length }));
+    check("math: formulas render after a /slug.html redirect", d.n > 0 && d.ok === d.n && !d.path.endsWith(".html"), JSON.stringify(d));
+  }
   check("console: no errors on phone", errors.length === 0, errors.slice(0, 2).join(" | "));
   await ctx.close();
 }

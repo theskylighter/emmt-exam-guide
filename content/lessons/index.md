@@ -49,7 +49,7 @@ Lessons tagged **Assignment** or **Teacher list** are the ones most likely to ap
 
 :::tip
 **Day 1:** Chapter 4 (devices, the teacher's own list), then Chapter 2 up to Curie temperature. Draw the hysteresis loop three times from memory.
-**Day 2:** Rest of Chapter 2, Chapters 1 and 3 (midsem recap), then Practice Sets 1 and 2 and the mock paper.
+**Day 2:** Rest of Chapter 2, Chapters 1 and 3 (midsem recap), then Practice Sets 1 and 2 and the [probable endsem paper](p3_practice.html).
 **Exam morning:** the Formula and Fact Sheet only.
 :::
 

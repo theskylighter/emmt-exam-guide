@@ -51,14 +51,14 @@ export function LessonPage() {
         el.dataset.done = "err";
       }
     });
-  }, [slug]);
+  }, [slug, pathname]);
 
   // Open or close every answer block when the topbar toggle changes, and on each new lesson.
   useEffect(() => {
     bodyRef.current?.querySelectorAll<HTMLDetailsElement>("details.ans").forEach((d) => {
       d.open = showAll;
     });
-  }, [showAll, slug]);
+  }, [showAll, slug, pathname]);
 
   // Add a copy button to every code block (not output or ASCII-diagram blocks).
   useEffect(() => {
@@ -77,7 +77,7 @@ export function LessonPage() {
       });
       block.appendChild(button);
     });
-  }, [slug]);
+  }, [slug, pathname]);
 
   if (rawSlug !== slug) return <Navigate to={redirectTo} replace />;
   if (slug === HOME_SLUG) return <Navigate to="/" replace />;

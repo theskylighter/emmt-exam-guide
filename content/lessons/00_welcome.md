@@ -22,7 +22,7 @@ A detective story rather than a dictionary. You remember a story because each sc
 1. Read a lesson from top to bottom: problem, idea, analogy, how it works with the textbook figure.
 2. Copy the **definition box** and redraw the **figure** in your notebook.
 3. Try the **Quick Check** before opening the answers.
-4. After each chapter, do the **practice set**; finish with the **mock paper** and the **fact sheet**.
+4. After each chapter, do the **practice set**; finish with the **probable endsem paper** (built on sir's real pattern) and the **fact sheet**.
 
 | Tag in a lesson header | Meaning |
 |---|---|
