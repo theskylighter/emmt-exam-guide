@@ -1,0 +1,385 @@
+// End-to-end smoke test for the study site, driven by headless Chrome (playwright-core).
+//
+//   npm run build && npm run e2e                    # builds, then starts its own preview server
+//   BASE=https://your-site.vercel.app npm run e2e   # test a deployed site instead
+//   CHROME_PATH="C:/Program Files/Google/Chrome/Application/chrome.exe" npm run e2e
+//
+// It checks behaviour a reader depends on: the sidebar keeps its scroll position while navigating,
+// both side panels collapse and remember it, the phone drawer works, nothing scrolls sideways on a
+// phone, and the console stays clean. Checks that cannot apply (for example scrolling a course list
+// that is shorter than the screen) are reported as SKIP rather than silently passing.
+import { homedir } from "node:os";
+import { spawn, execSync } from "node:child_process";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { createServer } from "node:net";
+import { fileURLToPath } from "node:url";
+import { chromium, devices } from "playwright-core";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const data = JSON.parse(readFileSync(resolve(here, "../src/data/lessons.json"), "utf-8"));
+let BASE = process.env.BASE;
+let server = null;
+
+// ---------- locate Chrome ----------
+function findChrome() {
+  const candidates = [
+    process.env.CHROME_PATH,
+    "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/usr/bin/google-chrome", "/usr/bin/google-chrome-stable", "/usr/bin/chromium", "/usr/bin/chromium-browser",
+  ];
+  // Fall back to a Chromium downloaded by Playwright (~/.cache/ms-playwright), newest first.
+  try {
+    const root = resolve(homedir(), ".cache/ms-playwright");
+    for (const dir of readdirSync(root).filter((n) => /^chromium-\d+$/.test(n)).sort().reverse()) {
+      candidates.push(resolve(root, dir, "chrome-linux64/chrome"), resolve(root, dir, "chrome-linux/chrome"));
+    }
+  } catch { /* no Playwright cache */ }
+  const found = candidates.find((c) => c && existsSync(c));
+  if (!found) throw new Error("Chrome not found. Install it or set CHROME_PATH to the executable.");
+  return found;
+}
+
+// ---------- own preview server (only when BASE is not given) ----------
+// A free port is picked each run: a fixed one lets a stale server from another project (or an earlier
+// run) answer the readiness check, and the tests then pass or fail against the wrong site.
+const freePort = () => new Promise((ok, fail) => {
+  const probe = createServer();
+  probe.on("error", fail);
+  probe.listen(0, "127.0.0.1", () => { const { port } = probe.address(); probe.close(() => ok(port)); });
+});
+async function startServer() {
+  const port = await freePort();
+  // detached: on POSIX the server gets its own process group, so stopServer can kill npx, sh and vite together.
+  server = spawn("npx", ["vite", "preview", "--port", String(port), "--strictPort"], { cwd: resolve(here, ".."), shell: true, stdio: "ignore", detached: process.platform !== "win32" });
+  BASE = `http://localhost:${port}`;
+  for (let i = 0; i < 60; i++) {
+    try { if ((await fetch(BASE + "/")).ok) return; } catch { /* not up yet */ }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  throw new Error("preview server did not start (run `npm run build` first)");
+}
+function stopServer() {
+  if (!server) return;
+  try {
+    if (process.platform === "win32") execSync(`taskkill /pid ${server.pid} /T /F`, { stdio: "ignore" });
+    else process.kill(-server.pid, "SIGTERM"); // the whole group; killing only the shell leaves vite running
+  } catch { /* already gone */ }
+}
+
+// ---------- tiny assertion helpers ----------
+const results = [];
+const check = (name, ok, detail = "") => results.push({ s: ok ? "PASS" : "FAIL", text: `${name}${detail ? "  - " + detail : ""}` });
+const skip = (name, why) => results.push({ s: "SKIP", text: `${name}  - ${why}` });
+const settle = (page, ms = 320) => page.waitForTimeout(ms); // wait out the 200ms panel/drawer transitions
+
+// ---------- pick test lessons from the exported data ----------
+const lessons = data.lessons;
+const rich = lessons.find((l) => l.toc.length >= 3 && l.html.includes("svgwrap--compact"))
+  ?? lessons.find((l) => l.toc.length >= 3) ?? lessons[0];
+const other = lessons.find((l) => l.slug !== rich.slug) ?? rich;
+const chapterOf = (slug) => data.chapters.find((c) => c.lessons.includes(slug))?.title;
+
+async function desktop(browser) {
+  const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+  const metrics = () => page.evaluate(() => {
+    const w = (s) => { const e = document.querySelector(s); return e ? Math.round(e.getBoundingClientRect().width) : null; };
+    const m = document.querySelector(".content").getBoundingClientRect();
+    return { left: w("aside.sidebar"), right: w("aside.toc-aside"), centre: Math.round(m.left + m.width / 2) };
+  });
+
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
+  await page.reload({ waitUntil: "networkidle" });
+
+  // --- home page ---
+  await page.goto(BASE + "/", { waitUntil: "networkidle" });
+  const cards = await page.locator(".roadmap .chapter-card").count();
+  check("home: roadmap cards render", cards >= 1, `${cards} chapter cards`);
+  const headings = await page.locator("main h2").allTextContents();
+  const dupes = headings.filter((h, i) => headings.indexOf(h) !== i);
+  check("home: no duplicated section headings", dupes.length === 0, dupes.join(", "));
+
+  // --- lesson page + layout ---
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  check("lesson: title rendered", (await page.locator("article.lesson h1").textContent()) === rich.title);
+  const compactDiagrams = await page.locator(".svgwrap--compact").count();
+  check("diagrams: compact SVG include renders its wrapper", compactDiagrams > 0, `${compactDiagrams} compact diagrams`);
+  const geo = await page.evaluate(() => {
+    const r = (s) => document.querySelector(s)?.getBoundingClientRect();
+    const l = r("aside.sidebar"), c = r(".content"), t = r("aside.toc-aside");
+    return { leftOfContent: !!l && l.right <= c.left + 1, rightOfContent: !!t && t.left >= c.right - 1 };
+  });
+  check("layout: course list left, 'On this page' right", geo.leftOfContent && geo.rightOfContent, JSON.stringify(geo));
+
+  // --- sidebar keeps its scroll position across navigation ---
+  // Expand every chapter, as a reader browsing the course would, so the list is as long as it gets.
+  for (const t of await page.locator("#course-sidebar button.chapter-toggle").all()) {
+    if ((await t.getAttribute("aria-expanded")) === "false") await t.click();
+  }
+  const scrollable = await page.evaluate(() => { const n = document.querySelector(".course-nav"); return n.scrollHeight - n.clientHeight > 80; });
+  if (scrollable) {
+    // Scroll the list down, then click a lesson link that is *visible there*, as a reader would.
+    // (Playwright's own click() would scroll the link into view first and move the list.)
+    const set = await page.evaluate(() => { const n = document.querySelector(".course-nav"); n.scrollTop = Math.min(n.scrollHeight - n.clientHeight, 700); window.__node = n; return n.scrollTop; });
+    const targetPath = await page.evaluate((current) => {
+      const nav = document.querySelector(".course-nav").getBoundingClientRect();
+      const link = [...document.querySelectorAll("#course-sidebar .pages a")].find((a) => {
+        const r = a.getBoundingClientRect();
+        return r.top >= nav.top + 8 && r.bottom <= nav.bottom - 8 && a.getAttribute("href") !== "/" + current;
+      });
+      if (!link) return null;
+      const href = link.getAttribute("href");
+      link.click();
+      return href;
+    }, rich.slug);
+    if (!targetPath) throw new Error("no visible lesson link found in the scrolled sidebar");
+    await page.waitForURL(new RegExp(`${targetPath}$`));
+    const after = await page.evaluate(() => ({ same: document.querySelector(".course-nav") === window.__node, top: document.querySelector(".course-nav").scrollTop }));
+    check("sidebar: same element after navigating (never remounted)", after.same);
+    check("sidebar: scroll position held while navigating", set > 50 && Math.abs(after.top - set) < 2, `set=${set} after=${after.top}`);
+    await page.waitForTimeout(150);
+    await page.reload({ waitUntil: "networkidle" });
+    const restored = await page.evaluate(() => document.querySelector(".course-nav").scrollTop);
+    check("sidebar: scroll position restored after a full reload", Math.abs(restored - after.top) < 2, `before=${after.top} after=${restored}`);
+    await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  } else {
+    skip("sidebar: scroll retention", "course list is shorter than the screen even with every chapter open (add more lessons to exercise this)");
+  }
+
+  // --- On this page + scroll-spy ---
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  const links = await page.locator(".toc-aside li a").count();
+  check("toc: lists the page's headings", links >= 3, `${links} links`);
+  const first = await page.locator(".toc-aside li.active a").first().textContent();
+  // jump to the furthest heading the page can actually scroll to (short pages can't reach the last ones)
+  const reachable = await page.evaluate((ids) => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const ok = ids.filter((id) => { const el = document.getElementById(id); return el && el.getBoundingClientRect().top + window.scrollY - 120 <= max; });
+    return ok[ok.length - 1];
+  }, rich.toc.map((t) => t.id));
+  if (reachable && reachable !== rich.toc[0].id) {
+    await page.evaluate((id) => document.getElementById(id)?.scrollIntoView(), reachable);
+    await settle(page, 450);
+    const later = await page.locator(".toc-aside li.active a").first().textContent();
+    check("toc: scroll-spy highlights the section being read", !!first && !!later && first !== later, `${first} -> ${later}`);
+  } else {
+    skip("toc: scroll-spy", "page is too short to scroll past its first heading");
+  }
+
+  // --- collapse / expand both panels, shortcut, persistence ---
+  const base = await metrics();
+  const leftBtn = page.locator("aside.sidebar .panel-head button"), leftRail = page.locator("aside.sidebar .rail-btn");
+  const rightBtn = page.locator("aside.toc-aside .panel-head button"), rightRail = page.locator("aside.toc-aside .rail-btn");
+  await leftBtn.click(); await settle(page);
+  let m = await metrics();
+  check("collapse: left panel becomes a 44px rail", m.left === 44 && m.right === base.right, JSON.stringify(m));
+  check("collapse: rail shows an expand button", await leftRail.isVisible());
+  await leftRail.click(); await settle(page);
+  check("collapse: left panel expands again", (await metrics()).left === base.left);
+  await page.keyboard.press("Control+b"); await settle(page);
+  const viaKey = (await metrics()).left;
+  await page.keyboard.press("Control+b"); await settle(page);
+  check("collapse: Ctrl+B toggles the course sidebar", viaKey === 44 && (await metrics()).left === base.left);
+  await rightBtn.click(); await settle(page);
+  m = await metrics();
+  check("collapse: right panel becomes a 44px rail, independently", m.right === 44 && m.left === base.left, JSON.stringify(m));
+  await leftBtn.click(); await settle(page);
+  m = await metrics();
+  check("collapse: both collapsed -> lesson centred", m.left === 44 && m.right === 44 && Math.abs(m.centre - 720) < 30, `centre=${m.centre}`);
+  const tabbable = await page.evaluate(() => [...document.querySelectorAll(".panel.collapsed .panel-body a, .panel.collapsed .panel-body button")].filter((e) => getComputedStyle(e).visibility !== "hidden").length);
+  check("collapse: hidden panels are out of the tab order", tabbable === 0);
+  await leftRail.click(); await settle(page);
+  await page.reload({ waitUntil: "networkidle" });
+  m = await metrics();
+  check("collapse: choice survives a reload", m.right === 44 && m.left === base.left, JSON.stringify(m));
+  await rightRail.click(); await settle(page);
+
+  // --- answers toggle ---
+  const answers = await page.locator("details.ans").count();
+  if (answers > 0) {
+    await page.locator("button.btn-ghost", { hasText: /answers/i }).click();
+    const open = await page.evaluate(() => document.querySelectorAll("details.ans[open]").length);
+    check("answers: 'Show answers' opens every answer", open === answers, `${open}/${answers}`);
+  } else {
+    const qLesson = lessons.find((l) => l.html.includes('class="ans"'));
+    if (qLesson) {
+      await page.goto(`${BASE}/${qLesson.slug}`, { waitUntil: "networkidle" });
+      await page.locator("button.btn-ghost", { hasText: /answers/i }).click();
+      const [o, t] = await page.evaluate(() => [document.querySelectorAll("details.ans[open]").length, document.querySelectorAll("details.ans").length]);
+      check("answers: 'Show answers' opens every answer", o === t && t > 0, `${o}/${t}`);
+    } else skip("answers toggle", "no lesson has answer blocks");
+  }
+
+  // --- theme, copy buttons, redirects, 404 ---
+  await page.locator("button[aria-label*='theme']").click();
+  check("theme: dark mode applies", await page.evaluate(() => document.documentElement.classList.contains("dark")));
+  await page.locator("button[aria-label*='theme']").click();
+  const codeLesson = lessons.find((l) => /codewrap (cpp|python)/.test(l.html));
+  if (codeLesson) {
+    await page.goto(`${BASE}/${codeLesson.slug}`, { waitUntil: "networkidle" });
+    const [btns, blocks] = await page.evaluate(() => [document.querySelectorAll(".codewrap:not(.output):not(.text):not(.uml) .copybtn").length, document.querySelectorAll(".codewrap:not(.output):not(.text):not(.uml)").length]);
+    if (blocks > 0) check("code: copy button on each code block", btns === blocks, `${btns}/${blocks}`);
+  }
+  const deepLesson = lessons.find((l) => l.html.includes('class="deep"'));
+  if (deepLesson) {
+    await page.goto(`${BASE}/${deepLesson.slug}`, { waitUntil: "networkidle" });
+    const closedOnLoad = await page.evaluate(() => document.querySelectorAll("details.deep[open]").length === 0);
+    check("deep dives: collapsed on load", closedOnLoad);
+    // Switch "Show answers" on here: answer blocks must open, deep dives must not.
+    const toggle = page.locator("button.btn-ghost", { hasText: /answers/i });
+    if (/show/i.test(await toggle.innerText())) await toggle.click();
+    const st = await page.evaluate(() => ({
+      deep: document.querySelectorAll("details.deep").length,
+      deepOpen: document.querySelectorAll("details.deep[open]").length,
+      ansOpen: document.querySelectorAll("details.ans[open]").length,
+      tocLeak: [...document.querySelectorAll(".toc-aside a")].some((a) => a.closest("details.deep") || document.querySelector(`details.deep [id="${(a.getAttribute("href") || "").slice(1)}"]`)),
+      firstId: document.querySelector("details.deep")?.id,
+    }));
+    check("deep dives: 'Show answers' opens answers but not deep dives", st.deep > 0 && st.ansOpen > 0 && st.deepOpen === 0, `${st.deepOpen}/${st.deep} deep dives open, ${st.ansOpen} answers open`);
+    await toggle.click(); // restore
+    check("deep dives: their headings stay out of 'On this page'", !st.tocLeak);
+    await page.goto(`${BASE}/${deepLesson.slug}#${st.firstId}`, { waitUntil: "networkidle" });
+    const opened = await page.evaluate((id) => document.getElementById(id)?.open === true, st.firstId);
+    check("deep dives: a #deep-... link opens its walkthrough", opened, st.firstId);
+  }
+  // --- search (Ctrl/Cmd+K) ---
+  // pick a heading whose text no other lesson uses, so the first search hit is this lesson
+  const plain = (t) => t.html.replace(/<[^>]+>/g, "").trim();
+  const allHeadings = lessons.flatMap((l) => l.toc.map(plain));
+  const heading = rich.toc.find((t) => allHeadings.filter((h) => h === plain(t)).length === 1) ?? rich.toc[2];
+  const headingText = heading.html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").trim();
+  await page.goto(`${BASE}/${other.slug}`, { waitUntil: "networkidle" });
+  await page.keyboard.press("Control+k");
+  check("search: Ctrl+K opens the search window with the box focused", await page.locator(".search-dialog").isVisible() && await page.evaluate(() => document.activeElement?.classList.contains("search-input")));
+  await page.keyboard.press("Escape");
+  check("search: Escape closes it", (await page.locator(".search-dialog").count()) === 0);
+  await page.keyboard.press("/");
+  check("search: '/' opens it too", await page.locator(".search-dialog").isVisible());
+  await page.fill(".search-input", headingText);
+  await page.locator(".search-hit").first().waitFor({ timeout: 8000 });
+  const titles = await page.locator(".search-hit-title").allInnerTexts();
+  check("search: a heading's text finds that section", titles.some((t) => t.replace(/\s+/g, " ").includes(headingText.replace(/\s+/g, " "))), `${titles.length} hits for "${headingText}"`);
+  check("search: matched words are highlighted", (await page.locator(".search-dialog mark").count()) > 0);
+  await page.fill(".search-input", headingText.slice(0, -1).replace(/(.)(.)$/, "$2$1")); // a typo near the end
+  await page.waitForTimeout(500);
+  check("search: tolerates a typo", (await page.locator(".search-hit").count()) > 0, headingText);
+  await page.fill(".search-input", "zzqxjvw");
+  await page.waitForTimeout(500);
+  check("search: no matches shows a message", (await page.locator(".search-hit").count()) === 0 && (await page.locator(".search-empty").innerText()).includes("No results"));
+  await page.fill(".search-input", headingText);
+  await page.waitForTimeout(500);
+  const wanted = page.locator(".search-hit", { has: page.locator(".search-hit-title", { hasText: headingText }) }).first();
+  await wanted.click();
+  await page.waitForURL(new RegExp(`/${rich.slug}#${heading.id}$`));
+  await page.waitForTimeout(600);
+  const landed = await page.evaluate((id) => ({ top: Math.round(document.getElementById(id)?.getBoundingClientRect().top ?? -999), dialog: !!document.querySelector(".search-dialog") }), heading.id);
+  check("search: choosing a result opens the lesson at that section, closes the window", landed.top >= 40 && landed.top <= 140 && !landed.dialog, JSON.stringify(landed));
+  const deepLessonData = lessons.find((l) => l.html.includes('class="deep"'));
+  if (deepLessonData) {
+    await page.keyboard.press("Control+k");
+    await page.fill(".search-input", "Deep dive");
+    await page.locator(".search-hit .search-hit-head svg").first().waitFor({ timeout: 8000 });
+    await page.keyboard.press("Enter");
+    await page.waitForURL(/#deep-/);
+    await page.waitForTimeout(500);
+    check("search: a deep-dive result opens that walkthrough", await page.evaluate(() => document.getElementById(location.hash.slice(1))?.open === true), "");
+  }
+  await page.goto(`${BASE}/${rich.slug}.html`, { waitUntil: "networkidle" });
+  check("routing: old .html URLs redirect to clean routes", page.url().endsWith(`/${rich.slug}`), page.url());
+  await page.goto(`${BASE}/definitely-not-a-lesson`, { waitUntil: "networkidle" });
+  check("routing: unknown URL shows a not-found page", ((await page.locator("h1").first().textContent()) ?? "").toLowerCase().includes("not found"));
+
+  // --- design rule: no emoji in the UI chrome ---
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  const emoji = await page.evaluate(() => {
+    const text = [...document.querySelectorAll(".topbar, .panel, .meta, .pager, .boxtitle")].map((e) => e.textContent).join(" ");
+    return (text.match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2705}\u{274C}]/gu) || []).join("");
+  });
+  check("design: no emoji in the interface chrome", emoji === "", emoji);
+  check("console: no errors on desktop", errors.length === 0, errors.slice(0, 2).join(" | "));
+}
+
+async function phone(browser) {
+  const ctx = await browser.newContext({ ...devices["iPhone 13"] });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  const vw = page.viewportSize().width;
+  const compactDiagram = await page.locator(".svgwrap--compact").first().evaluate((el) => {
+    const wrapper = el.getBoundingClientRect();
+    const svg = el.querySelector("svg")?.getBoundingClientRect();
+    return { wrapperRight: wrapper.right, svgWidth: svg?.width ?? 0, viewport: innerWidth };
+  }).catch(() => null);
+  check("phone: compact diagram fits content width", !compactDiagram || (compactDiagram.wrapperRight <= vw + 1 && compactDiagram.svgWidth <= vw), JSON.stringify(compactDiagram));
+  const menu = page.locator("button.menu-btn");
+  const box = await menu.boundingBox();
+  check("phone: menu button visible, inside the screen, >= 40px", !!box && box.x >= 0 && box.x + box.width <= vw && box.width >= 40 && box.height >= 40, JSON.stringify(box));
+  const hidden = () => page.evaluate(() => getComputedStyle(document.querySelector("#course-sidebar")).visibility === "hidden");
+  check("phone: drawer is closed on load", await hidden());
+  await menu.tap(); await settle(page, 400);
+  const drawer = await page.evaluate(() => { const r = document.querySelector("#course-sidebar").getBoundingClientRect(); return { left: r.left, width: r.width }; });
+  check("phone: menu opens the drawer from the left, backdrop visible", drawer.left === 0 && drawer.width < vw && (await menu.getAttribute("aria-expanded")) === "true", JSON.stringify(drawer));
+  check("phone: page scroll is locked while the drawer is open", await page.evaluate(() => document.body.style.overflow === "hidden"));
+  await page.keyboard.press("Escape"); await settle(page, 400);
+  check("phone: Escape closes the drawer", await hidden());
+  await menu.tap(); await settle(page, 400);
+  await page.mouse.click(vw - 8, 300); await settle(page, 400);
+  check("phone: tapping the backdrop closes the drawer", await hidden());
+  if (other.slug !== rich.slug) {
+    await menu.tap(); await settle(page, 400);
+    const ch = chapterOf(other.slug);
+    const toggle = page.locator("#course-sidebar button.chapter-toggle", { hasText: ch ?? "" }).first();
+    if ((await toggle.getAttribute("aria-expanded")) === "false") await toggle.tap();
+    await page.locator(`#course-sidebar a[href="/${other.slug}"]`).first().tap();
+    await page.waitForURL(new RegExp(`/${other.slug}$`)); await settle(page, 400);
+    check("phone: choosing a lesson navigates and closes the drawer", await hidden());
+  }
+
+  // search is a full-screen sheet on phones
+  await page.goto(`${BASE}/${rich.slug}`, { waitUntil: "networkidle" });
+  const searchBtn = page.locator("button.search-btn");
+  const sb = await searchBtn.boundingBox();
+  check("phone: search button visible and >= 40px", !!sb && sb.width >= 40 && sb.height >= 40 && sb.x + sb.width <= vw, JSON.stringify(sb));
+  await searchBtn.tap();
+  await page.fill(".search-input", rich.title.split(/\s+/)[0]);
+  await page.locator(".search-hit").first().waitFor({ timeout: 8000 });
+  const sheet = await page.evaluate(() => { const r = document.querySelector(".search-dialog").getBoundingClientRect(); return { w: Math.round(r.width), h: Math.round(r.height), vw: innerWidth, vh: innerHeight, over: document.documentElement.scrollWidth - document.documentElement.clientWidth }; });
+  check("phone: search opens as a full-screen sheet without sideways scroll", sheet.w === sheet.vw && sheet.h >= sheet.vh - 2 && sheet.over <= 1, JSON.stringify(sheet));
+  await page.keyboard.press("Escape");
+
+  // every page must fit the screen width (no sideways scrolling)
+  const bad = [];
+  for (const p of ["/", ...lessons.map((l) => "/" + l.slug)]) {
+    await page.goto(BASE + p, { waitUntil: "load" });
+    const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    if (over > 1) bad.push(`${p} (+${over}px)`);
+  }
+  check(`phone: no page scrolls sideways (${lessons.length + 1} pages)`, bad.length === 0, bad.slice(0, 5).join(", "));
+  check("console: no errors on phone", errors.length === 0, errors.slice(0, 2).join(" | "));
+  await ctx.close();
+}
+
+try {
+  if (!BASE) await startServer();
+  const browser = await chromium.launch({ executablePath: findChrome(), headless: true });
+  await desktop(browser);
+  await phone(browser);
+  await browser.close();
+} catch (e) {
+  results.push({ s: "FAIL", text: `test run crashed: ${e.message}` });
+} finally {
+  stopServer();
+}
+
+for (const r of results) console.log(`${r.s}  ${r.text}`);
+const failed = results.filter((r) => r.s === "FAIL").length;
+console.log(`\n${results.filter((r) => r.s === "PASS").length} passed, ${failed} failed, ${results.filter((r) => r.s === "SKIP").length} skipped  (${BASE})`);
+process.exit(failed ? 1 : 0);

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 365" width="100%" style="max-width:840px;height:auto">
+<defs><marker id="ar_pn_junction_depletion" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+<rect width="840" height="365" fill="white"/>
+<text x="420" y="26" font-size="17" text-anchor="middle" fill="#222" font-family="Georgia, serif" font-weight="bold">p–n junction at equilibrium: depletion region and built-in field</text>
+<rect x="60" y="50" width="300" height="160" fill="#f6cdbb"/><rect x="360" y="50" width="120" height="160" fill="#eeeeee"/><rect x="480" y="50" width="300" height="160" fill="#bcd3f5"/><line x1="420" y1="45" x2="420" y2="215" stroke="#222" stroke-dasharray="5,4"/><text x="210" y="235" font-size="13" text-anchor="middle" fill="#222" font-family="Georgia, serif" >p-side: majority holes (h⁺)</text>
+<text x="630" y="235" font-size="13" text-anchor="middle" fill="#222" font-family="Georgia, serif" >n-side: majority electrons (e⁻)</text>
+<text x="420" y="235" font-size="13" text-anchor="middle" fill="#444" font-family="Georgia, serif" >depletion region</text>
+<text x="420" y="252" font-size="11" text-anchor="middle" fill="#666" font-family="Georgia, serif" >(no free carriers — only fixed ions)</text>
+<circle cx="142" cy="138" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="141.87080304389175" y="142.47094541495352" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="176" cy="147" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="176.18834330250058" y="150.52920521048625" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="243" cy="74" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="242.68727906809406" y="77.84639599737477" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="83" cy="178" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="83.42367780426727" y="182.0583260830221" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="147" cy="97" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="147.43204372528197" y="100.63467974130401" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="339" cy="128" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="338.8676572327203" y="132.48557351553046" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="297" cy="129" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="297.47997733134105" y="133.30768317441022" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="246" cy="85" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="246.1577165414821" y="89.33321724317574" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="245" cy="182" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="245.063771154149" y="186.18611646434505" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="216" cy="165" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="216.02711469965834" y="169.06900058720117" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="255" cy="74" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="254.56698359609408" y="77.64424416064463" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="277" cy="145" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="277.1398640345725" y="148.79844369572788" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="158" cy="69" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="158.3295914740852" y="73.18658644841625" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="305" cy="129" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="305.03708161452585" y="132.82112696983802" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="267" cy="184" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="266.8942202571088" y="187.63972803449002" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="266" cy="189" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="265.67366573891263" y="193.34832012382304" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="183" cy="173" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="182.69048504019344" y="177.12268408300582" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="196" cy="191" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="195.60147457319778" y="195.30420743011035" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="309" cy="78" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="308.5053316878908" y="82.15633181366843" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="115" cy="94" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="115.35190365217392" y="98.29323706647354" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="331" cy="124" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="331.02483611353273" y="127.88185199470296" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="243" cy="106" r="8" fill="none" stroke="#c0392b" stroke-width="1.8"/><text x="242.92855562536903" y="109.63853678744323" font-size="11" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >+</text>
+<circle cx="632" cy="117" r="8" fill="#2c6fbb"/><text x="631.8831757955554" y="121.09194494406185" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="591" cy="144" r="8" fill="#2c6fbb"/><text x="591.2367270802469" y="147.98500449972408" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="652" cy="187" r="8" fill="#2c6fbb"/><text x="651.9054661722517" y="191.06723906444964" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="677" cy="190" r="8" fill="#2c6fbb"/><text x="677.3153555250913" y="194.4076561620023" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="723" cy="199" r="8" fill="#2c6fbb"/><text x="722.6641472631565" y="202.78360205729004" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="675" cy="87" r="8" fill="#2c6fbb"/><text x="674.5311209622547" y="91.01844896609441" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="724" cy="195" r="8" fill="#2c6fbb"/><text x="723.7657586102298" y="199.2254478867233" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="735" cy="142" r="8" fill="#2c6fbb"/><text x="735.2209559731815" y="145.82951296903366" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="686" cy="94" r="8" fill="#2c6fbb"/><text x="685.5924252452918" y="97.50187279620577" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="716" cy="142" r="8" fill="#2c6fbb"/><text x="716.2180618710721" y="146.42686756742344" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="574" cy="74" r="8" fill="#2c6fbb"/><text x="574.0889401164134" y="77.56717791460596" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="722" cy="199" r="8" fill="#2c6fbb"/><text x="722.0250469898969" y="202.62381201441346" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="523" cy="173" r="8" fill="#2c6fbb"/><text x="523.0147042085293" y="177.08036836976277" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="607" cy="85" r="8" fill="#2c6fbb"/><text x="606.7200751099363" y="89.35332555112929" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="576" cy="169" r="8" fill="#2c6fbb"/><text x="576.4117241729562" y="172.78690478244152" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="727" cy="71" r="8" fill="#2c6fbb"/><text x="726.9194264033324" y="74.96565825248835" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="660" cy="71" r="8" fill="#2c6fbb"/><text x="659.7784574182702" y="75.0669328719649" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="687" cy="110" r="8" fill="#2c6fbb"/><text x="686.7945241366142" y="113.67880971256602" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="729" cy="197" r="8" fill="#2c6fbb"/><text x="729.0353798843131" y="201.38582717385086" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="631" cy="200" r="8" fill="#2c6fbb"/><text x="631.4092971484914" y="203.79870762572983" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="581" cy="75" r="8" fill="#2c6fbb"/><text x="580.5142139038481" y="79.3910451352306" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<circle cx="656" cy="69" r="8" fill="#2c6fbb"/><text x="655.9383302871162" y="73.2359978936679" font-size="12" text-anchor="middle" fill="white" font-family="Georgia, serif" >−</text>
+<rect x="366" y="61" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="375" y="75" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="391" y="61" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="400" y="75" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="431" y="61" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="440" y="75" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="456" y="61" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="465" y="75" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="366" y="89" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="375" y="103" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="391" y="89" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="400" y="103" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="431" y="89" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="440" y="103" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="456" y="89" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="465" y="103" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="366" y="117" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="375" y="131" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="391" y="117" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="400" y="131" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="431" y="117" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="440" y="131" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="456" y="117" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="465" y="131" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="366" y="145" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="375" y="159" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="391" y="145" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="400" y="159" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="431" y="145" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="440" y="159" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="456" y="145" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="465" y="159" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="366" y="173" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="375" y="187" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="391" y="173" width="18" height="18" fill="#c0392b" fill-opacity="0.18" stroke="#c0392b"/><text x="400" y="187" font-size="13" text-anchor="middle" fill="#c0392b" font-family="Georgia, serif" >−</text>
+<rect x="431" y="173" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="440" y="187" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<rect x="456" y="173" width="18" height="18" fill="#2c6fbb" fill-opacity="0.18" stroke="#2c6fbb"/><text x="465" y="187" font-size="13" text-anchor="middle" fill="#2c6fbb" font-family="Georgia, serif" >+</text>
+<line x1="470" y1="40" x2="370" y2="40" stroke="#222" stroke-width="2.4" marker-end="url(#ar_pn_junction_depletion)"/><text x="420" y="36" font-size="12" text-anchor="middle" fill="#222" font-family="Georgia, serif" ></text>
+<text x="500" y="44" font-size="13" text-anchor="start" fill="#222" font-family="Georgia, serif" font-weight="bold">Built-in field E (n → p)</text>
+<text x="375" y="285" font-size="12" text-anchor="end" fill="#c0392b" font-family="Georgia, serif" >acceptor ions (A⁻) left behind</text>
+<text x="465" y="285" font-size="12" text-anchor="start" fill="#2c6fbb" font-family="Georgia, serif" >donor ions (D⁺) left behind</text>
+<line x1="380" y1="275" x2="385" y2="212" stroke="#c0392b"/><line x1="460" y1="275" x2="455" y2="212" stroke="#2c6fbb"/><text x="420" y="315" font-size="12.5" text-anchor="middle" fill="#333" font-family="Georgia, serif" >Diffusion pushes carriers across → they recombine → fixed ions remain → field E builds up → stops further diffusion.</text>
+<text x="420" y="333" font-size="12.5" text-anchor="middle" fill="#333" font-family="Georgia, serif" >Result: a potential barrier V₀ (~0.7 V for Si). Forward bias lowers it, reverse bias raises it.</text>
+<text x="420" y="352" font-size="11" text-anchor="middle" fill="#888" font-family="Georgia, serif" font-style="italic">Diagram drawn for these notes (not from the textbook)</text>
+
+</svg>

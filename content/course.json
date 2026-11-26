@@ -1,0 +1,60 @@
+{
+  "title": "EMMT Endsem Study Guide",
+  "chapters": [
+    {
+      "title": "Start Here",
+      "lessons": [
+        { "slug": "00_welcome", "title": "How to Use This Guide", "syllabus": "Overview" }
+      ]
+    },
+    {
+      "title": "Chapter 1 · The Electron as a Magnet",
+      "lessons": [
+        { "slug": "01_1_quantum_numbers_spin", "title": "Quantum Numbers, Spin and Unpaired Electrons", "syllabus": "Midsem recap" }
+      ]
+    },
+    {
+      "title": "Chapter 2 · Magnetic Materials",
+      "lessons": [
+        { "slug": "02_1_magnetic_dipoles", "title": "Where Magnetism Comes From", "syllabus": "Magnetic Materials" },
+        { "slug": "02_2_b_h_m", "title": "Measuring Magnetism: H, B, M and Permeability", "syllabus": "Magnetic Materials" },
+        { "slug": "02_3_types_of_magnetism", "title": "Five Kinds of Magnetic Behaviour", "syllabus": "Magnetic Materials" },
+        { "slug": "02_4_domains", "title": "Domains and Bloch Walls", "syllabus": "Magnetic Materials" },
+        { "slug": "02_5_hysteresis", "title": "The Ferromagnetic Hysteresis (B-H) Loop", "syllabus": "Assignment 1" },
+        { "slug": "02_6_curie_temperature", "title": "Curie Temperature", "syllabus": "Assignment 2" },
+        { "slug": "02_7_soft_vs_hard", "title": "Soft vs Hard Magnetic Materials", "syllabus": "Assignment 1" },
+        { "slug": "02_8_applications", "title": "Three Industrial Applications", "syllabus": "Assignment 3" },
+        { "slug": "p1_practice", "title": "Practice Set 1 · Magnetic Materials", "syllabus": "Practice" }
+      ]
+    },
+    {
+      "title": "Chapter 3 · Setting the Stage for Bell Labs",
+      "lessons": [
+        { "slug": "03_1_conduction_bands", "title": "Conduction and Energy Bands", "syllabus": "Midsem recap" },
+        { "slug": "03_2_doping", "title": "Doping: n-type and p-type", "syllabus": "Midsem recap" },
+        { "slug": "03_3_hall_effect", "title": "The Hall Effect", "syllabus": "Midsem recap" },
+        { "slug": "03_4_pure_silicon", "title": "Growing Pure Silicon (Czochralski)", "syllabus": "Midsem recap" },
+        { "slug": "03_5_dielectrics", "title": "Dielectrics on One Page", "syllabus": "Midsem recap" }
+      ]
+    },
+    {
+      "title": "Chapter 4 · Semiconductor Devices",
+      "lessons": [
+        { "slug": "04_1_pn_junction", "title": "The p-n Junction: How It Forms", "syllabus": "Teacher list 1" },
+        { "slug": "04_2_diode_working", "title": "Diode Working: Bias, I-V Curve, Rectification", "syllabus": "Teacher list 1" },
+        { "slug": "04_3_bjt", "title": "The Junction Transistor", "syllabus": "Teacher list 2" },
+        { "slug": "04_4_mosfet", "title": "The MOSFET", "syllabus": "Teacher list 2" },
+        { "slug": "04_5_solar_cell", "title": "Solar Cell: Construction and Working", "syllabus": "Teacher list 3" },
+        { "slug": "04_6_solar_jv", "title": "Solar Cell J-V Characteristics", "syllabus": "Teacher list 3" },
+        { "slug": "p2_practice", "title": "Practice Set 2 · Semiconductor Devices", "syllabus": "Practice" }
+      ]
+    },
+    {
+      "title": "Chapter 5 · Revision",
+      "lessons": [
+        { "slug": "05_1_fact_sheet", "title": "Formula and Fact Sheet", "syllabus": "Revision" },
+        { "slug": "p3_practice", "title": "Mock Endsem Paper", "syllabus": "Practice" }
+      ]
+    }
+  ]
+}
