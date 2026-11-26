@@ -44,6 +44,10 @@ Equation 12.21 is the principle of the **LED**: in a forward-biased junction, re
 
 <<SVG:callister_fig12_21:compact>>
 
+**Watch it happen.** Follow the operating point along the I-V curve while the depletion region narrows (forward), widens (reverse) and finally breaks down.
+
+<<ANIM:pn_junction>>
+
 | Region | What the curve does | Why |
 |---|---|---|
 | Forward bias (right) | current stays small until about 0.7 V (Si), then rises **exponentially** | the barrier has been lowered enough for carriers to flood across |

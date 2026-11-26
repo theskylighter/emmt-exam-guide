@@ -37,6 +37,10 @@ Two rooms joined by a doorway. The p-room has empty seats (holes), the n-room ha
 
 <<SVG:pn_junction_depletion>>
 
+**Watch it happen.** Step through the formation of the depletion region; the last steps preview forward and reverse bias from the next lesson.
+
+<<ANIM:pn_junction>>
+
 | Term | Meaning |
 |---|---|
 | **Depletion region** | thin layer around the junction with **no mobile carriers**, only fixed ions |

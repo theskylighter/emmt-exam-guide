@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation: how a solar cell works, and its J-V curve</title>
+<!--
+  Construction -> photon makes an electron-hole pair -> the junction field separates it -> current through
+  the load -> operating point moves along the J-V curve from Jsc through the maximum power point to Voc.
+  J-V uses the lesson's worked example: Jsc = 38 mA/cm2, Voc = 0.63 V, n = 1, kT/q = 0.0259 V, which gives
+  Vm = 0.55 V, Jm = 36.3 mA/cm2, FF = 0.83 and efficiency 19.9 % at 100 mW/cm2.
+  One progress value t drives the steps (player.js); the dot on the J-V curve can also be dragged.
+-->
+<link rel="stylesheet" href="player.css">
+<style>
+  .wire { stroke: var(--muted); stroke-width: 2; fill: none; }
+  .tag { font-size: 11px; fill: var(--muted); }
+  .lead { stroke: var(--line); stroke-width: 1; }
+  .photon { fill: var(--sun); }
+  .ray { stroke: var(--sun); stroke-width: 2; fill: none; }
+  .ring { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+  .curve { fill: none; stroke: var(--minus); stroke-width: 2.5; }
+  .pbox { fill: var(--soft); stroke: var(--plus); stroke-width: 1.2; }
+  .ideal { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+  #jv { touch-action: none; }
+  #jv.live { cursor: grab; }
+</style>
+<script src="player.js"></script>
+</head>
+<body>
+<div id="root">
+  <figure role="group" aria-label="Animated silicon solar cell: construction, photovoltaic effect and J-V characteristic">
+    <div class="panels">
+      <div class="panel wide">
+        <h3>Inside the cell</h3>
+        <svg id="cell" viewBox="0 0 460 300" role="img" aria-label="Cross-section of a silicon solar cell with light, carriers and the external load">
+          <g id="sun"></g>
+          <rect x="70" y="66" width="300" height="6" fill="var(--plus)" opacity=".35"></rect>
+          <rect x="70" y="72" width="300" height="24" fill="var(--n-tint)"></rect>
+          <rect x="70" y="72" width="300" height="24" fill="var(--n-tint)"></rect>
+          <rect x="70" y="96" width="300" height="16" fill="var(--dep)"></rect>
+          <rect x="70" y="112" width="300" height="150" fill="var(--p-tint)"></rect>
+          <rect x="70" y="262" width="300" height="12" fill="var(--metal)"></rect>
+          <g id="fingers"></g>
+          <line x1="356" y1="98" x2="356" y2="108" stroke="var(--fg)" stroke-width="1.6"></line>
+          <polygon points="356,111 352,104 360,104" fill="var(--fg)"></polygon>
+          <g id="tags"></g>
+          <path id="ext" class="wire" d="M100,58 V40 H30 V140 l-8,5 16,10 -16,10 16,10 -16,10 8,5 V288 H220 V274"></path>
+          <text x="44" y="170" class="tag">load</text>
+          <g id="carriers"></g>
+          <g id="flow"></g>
+        </svg>
+      </div>
+      <div class="panel">
+        <h3>J-V characteristic</h3>
+        <svg id="jv" viewBox="0 0 300 300" role="img" aria-label="Current density against voltage, with the power rectangle">
+          <line class="axis" x1="40" y1="250" x2="292" y2="250"></line>
+          <line class="axis" x1="40" y1="250" x2="40" y2="20"></line>
+          <text x="290" y="268" class="lbl" text-anchor="end">V</text>
+          <text x="30" y="24" class="lbl" text-anchor="end">J</text>
+          <rect id="ideal" class="ideal fade"></rect>
+          <rect id="pbox" class="pbox"></rect>
+          <path id="curve" class="curve"></path>
+          <g id="marks"></g>
+          <circle id="dot" class="dot" r="8"></circle>
+          <text id="r1" x="50" y="176" class="small"></text>
+          <text id="r2" x="50" y="194" class="small"></text>
+          <text id="r3" x="50" y="212" class="small"></text>
+        </svg>
+      </div>
+    </div>
+    <figcaption class="visually-hidden">
+      A silicon solar cell: front metal grid, anti-reflection coating, thin n+ emitter, junction with built-in field,
+      thick p base and back aluminium contact. A photon creates an electron-hole pair; the field sends the electron to the
+      n side and the hole to the p side; electrons flow through the load. On the J-V curve the operating point moves from
+      the short-circuit current through the maximum power point (fill factor 0.83, efficiency about 20 %) to the
+      open-circuit voltage.
+    </figcaption>
+  </figure>
+</div>
+<script>
+(() => {
+  const { el, css, clamp, lerp, ease } = Explainer;
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- J-V physics (lesson's worked example) ----------
+  const JSC = 38, VOC = 0.63, VT = 0.0259;
+  const J0 = JSC / (Math.exp(VOC / VT) - 1);
+  const J = (V) => JSC - J0 * (Math.exp(V / VT) - 1);
+  let VM = 0, PM = 0; for (let V = 0; V <= VOC; V += 1e-4) { const P = V * J(V); if (P > PM) { PM = P; VM = V; } }
+  const JM = J(VM), FF = PM / (VOC * JSC);
+  const PX = (V) => 40 + V / 0.7 * 240, PY = (j) => 250 - j / 42 * 215;
+
+  // ---------- timeline ----------
+  const SEG = [1, 1.2, 1.2, 1.5, 1];
+  const TOTAL = SEG.reduce((a, b) => a + b, 0);
+  const segStart = []; { let a = 0; for (const w of SEG) { segStart.push(a / TOTAL); a += w; } }
+  const segLen = (i) => SEG[i] / TOTAL;
+  // At an exact stop, show the END of the step before it (the state its caption describes).
+  const locate = (t) => { let i = SEG.length - 1; while (i > 0 && t <= segStart[i] + 1e-9) i--; return { i, q: clamp((t - segStart[i]) / segLen(i)) }; };
+  const STOPS = [0, segStart[1], segStart[2], segStart[3], segStart[4], 1];
+  const f2 = (x) => x.toFixed(2);
+  const CAP = [
+    "<b>Construction</b>: a large-area p-n junction. A thin, heavily doped <b>n⁺ emitter</b> on a thick <b>p-type base</b>, a front <b>metal finger grid</b> that lets light in, an <b>anti-reflection coating</b> (ARC), and a full <b>back aluminium contact</b>.",
+    "A <b>photon</b> with <b>hν ≥ Eg</b> is absorbed in the base and creates an <b>electron-hole pair</b>.",
+    "The pair diffuses to the junction. The <b>built-in field</b> sweeps the <b>electron to the n-side</b> and leaves the <b>hole on the p-side</b>. The charges are separated, so a voltage appears.",
+    "Connect a load: electrons leave through the <b>front grid</b>, flow through the <b>load</b> and return at the <b>back contact</b>, where they recombine with holes. This is the light-generated current. With the terminals shorted (V = 0) it is the <b>short-circuit current J<sub>sc</sub></b> = 38 mA/cm², the largest current.",
+    `Raise the load resistance: V rises while J stays nearly flat, then drops at the knee. The power <b>P = V × J</b> is the shaded rectangle, largest at the <b>maximum power point</b> (V<sub>m</sub> = ${f2(VM)} V, J<sub>m</sub> = ${JM.toFixed(1)} mA/cm²). <b>FF = V<sub>m</sub>J<sub>m</sub> / V<sub>oc</sub>J<sub>sc</sub> = ${f2(FF)}</b> (shaded area over dashed box), so <b>η = ${(PM).toFixed(1)}%</b> under 100 mW/cm².`,
+    "<b>Open circuit</b> (load removed): J = 0 and V = <b>V<sub>oc</sub> = 0.63 V</b>, the largest voltage. Power is zero here, just as at J<sub>sc</sub>. <b>Drag the dot</b> along the curve to explore.",
+  ];
+  // operating voltage on the J-V curve for a given t (only from step 4 on)
+  const Vof = (t) => { const { i, q } = locate(t); return i < 3 ? 0 : i === 3 ? lerp(0, VM, q) : lerp(VM, VOC, q); };
+  const tOfV = (V) => V <= VM ? segStart[3] + (V / VM) * segLen(3) : segStart[4] + ((V - VM) / (VOC - VM)) * segLen(4);
+
+  // ---------- static construction ----------
+  for (const x of [96, 156, 216, 276, 336]) el("rect", { x, y: 58, width: 14, height: 8, fill: "var(--metal)" }, $("fingers"));
+  // [layer y, label y, text]: labels spread out, leader lines point at the layer
+  const TAGS = [[62, 48, "front grid"], [69, 66, "ARC"], [84, 84, "n⁺ emitter"], [104, 104, "junction, field E"], [190, 190, "p base"], [268, 268, "back contact"]];
+  TAGS.forEach(([ly, ty, text]) => { el("line", { x1: 371, y1: ly, x2: 383, y2: ty, class: "lead" }, $("tags")); const t = el("text", { x: 386, y: ty + 4, class: "tag" }, $("tags")); t.textContent = text; });
+  for (let k = 0; k < 5; k++) el("path", { class: "ray", d: `M${110 + k * 56},4 l8,14 l-6,0 l8,14`, opacity: 0.55 }, $("sun"));
+
+  // ---------- carriers ----------
+  const photon = () => { const g = el("g", {}, $("carriers")); el("circle", { r: 5, class: "photon" }, g); el("path", { d: "M0,-8 q4,-4 0,-8 t0,-8", class: "ray" }, g); return g; };
+  const hole = () => el("circle", { r: 5, class: "hole" }, $("carriers"));
+  const elec = () => el("circle", { r: 4.2, class: "electron" }, $("carriers"));
+  const move = (n, x, y, op) => { n.setAttribute("transform", `translate(${x},${y})`); n.style.opacity = op; };
+  const AX = 226, AY = 196;                      // where the walkthrough photon is absorbed
+  const walk = { ph: photon(), e: elec(), h: hole(), ring: el("circle", { class: "ring", r: 0 }, $("carriers")) };
+  [walk.e, walk.h].forEach((n) => { n.setAttribute("cx", 0); n.setAttribute("cy", 0); });
+  // steady-state events once the load is connected
+  const events = Array.from({ length: 6 }, (_, k) => ({ ph: k / 6, x: 112 + k * 44, y: 150 + ((k * 37) % 90), p: photon(), e: elec(), h: hole() }));
+  events.forEach((v) => [v.e, v.h].forEach((n) => { n.setAttribute("cx", 0); n.setAttribute("cy", 0); }));
+  const ext = $("ext"), extLen = ext.getTotalLength();
+  const flow = Array.from({ length: 10 }, (_, k) => ({ ph: k / 10, n: el("circle", { r: 3.8, class: "electron" }, $("flow")) }));
+
+  // ---------- J-V static ----------
+  const pts = []; for (let V = 0; V <= VOC + 1e-9; V += 0.002) pts.push(`${PX(V).toFixed(1)},${PY(Math.max(0, J(V))).toFixed(1)}`);
+  $("curve").setAttribute("d", "M" + pts.join(" L"));
+  const mark = (x, y, text, anchor = "middle") => { const t = el("text", { x, y, class: "small", "text-anchor": anchor }, $("marks")); t.textContent = text; };
+  mark(34, PY(JSC) + 4, "Jsc", "end"); mark(PX(VOC), 266, "Voc"); mark(PX(VM), 266, "Vm");
+  el("line", { x1: PX(VM), x2: PX(VM), y1: 250, y2: PY(JM), class: "ideal" }, $("marks"));
+  for (const [k, v] of Object.entries({ x: PX(0), y: PY(JSC), width: PX(VOC) - PX(0), height: 250 - PY(JSC) })) $("ideal").setAttribute(k, v);
+
+  function render(t, { clock }) {
+    const { i, q } = locate(t);
+    // walkthrough photon (step 2) and separation (step 3)
+    const fall = i === 0 ? clamp(q / 0.7) : 1;
+    move(walk.ph, AX, lerp(-10, AY, ease(fall)), i === 0 && q < 0.72 ? 1 : 0);
+    const r = i === 0 ? (q - 0.72) / 0.28 : -1;
+    walk.ring.setAttribute("cx", AX); walk.ring.setAttribute("cy", AY);
+    walk.ring.setAttribute("r", r > 0 ? 4 + 12 * r : 0); walk.ring.style.opacity = r > 0 ? 1 - r : 0;
+    const showPair = (i === 0 && q >= 0.72) || i === 1;
+    const s = i === 1 ? q : 0;                    // electron: diffuse up, swept across the junction, into the grid
+    const ey = s < 0.5 ? lerp(AY, 114, ease(s / 0.5)) : s < 0.7 ? lerp(114, 86, (s - 0.5) / 0.2) : lerp(86, 66, ease((s - 0.7) / 0.3));
+    const ex = s < 0.7 ? AX : lerp(AX, 223, (s - 0.7) / 0.3);
+    move(walk.e, ex - (showPair && s === 0 ? 7 : 0), ey, showPair ? 1 : 0);
+    move(walk.h, AX + (s === 0 ? 7 : 0), lerp(AY, 236, ease(s)), showPair ? 1 : 0);
+
+    // steady state: many photons, carriers separate, electrons go round the external circuit
+    const steady = i >= 2 ? (i === 2 ? clamp(q / 0.3) : 1) : 0;
+    const V = Vof(t), jNow = Math.max(0, J(V)), flowFrac = jNow / JSC;
+    events.forEach((v) => {
+      const p = (clock * 0.28 + v.ph) % 1;
+      move(v.p, v.x, lerp(-10, v.y, clamp(p / 0.2)), steady * (p < 0.2 ? 1 : 0));
+      const k = clamp((p - 0.2) / 0.55);
+      const ey = k < 0.6 ? lerp(v.y, 114, k / 0.6) : lerp(114, 80, (k - 0.6) / 0.4);
+      move(v.e, v.x - 6, ey, steady * (p >= 0.2 && p < 0.8 ? 1 : 0));
+      move(v.h, v.x + 6, lerp(v.y, 256, clamp((p - 0.2) / 0.7)), steady * (p >= 0.2 && p < 0.9 ? 1 : 0));
+    });
+    flow.forEach((f) => {
+      const pt = ext.getPointAtLength(((clock * 0.18 + f.ph) % 1) * extLen);
+      f.n.setAttribute("cx", pt.x); f.n.setAttribute("cy", pt.y); f.n.style.opacity = steady * flowFrac;
+    });
+
+    // J-V: operating point and the power rectangle
+    const onCurve = i >= 3 || (i === 2 && q > 0.5);
+    $("dot").style.opacity = onCurve ? 1 : 0;
+    $("dot").setAttribute("cx", PX(V)); $("dot").setAttribute("cy", PY(jNow));
+    const box = { x: PX(0), y: PY(jNow), width: PX(V) - PX(0), height: 250 - PY(jNow) };
+    for (const k in box) $("pbox").setAttribute(k, box[k]);
+    $("pbox").style.opacity = i >= 3 ? 1 : 0;
+    $("ideal").style.opacity = i >= 3 && V > VM * 0.6 ? 1 : 0;
+    const atMpp = Math.abs(V - VM) < 0.004;
+    $("r1").textContent = onCurve ? (V < 0.002 ? "short circuit (R = 0)" : V > VOC - 0.002 ? "open circuit (no load)" : atMpp ? "maximum power point" : "load connected") : "";
+    $("r2").textContent = onCurve ? `V = ${f2(V)} V, J = ${jNow.toFixed(1)} mA/cm²` : "";
+    $("r3").textContent = onCurve ? (atMpp ? `P = ${PM.toFixed(1)} mW/cm², FF = ${f2(FF)}` : `P = V × J = ${(V * jNow).toFixed(1)} mW/cm²`) : "";
+    $("jv").classList.toggle("live", onCurve);
+  }
+
+  const player = Explainer({ stops: STOPS, captions: CAP, render, ambient: (t) => t >= segStart[2] - 1e-6 });
+
+  // Drag the operating point along the curve: maps the pointer's V back onto the timeline.
+  const svg = $("jv");
+  const toV = (ev) => { const r = svg.getBoundingClientRect(); const x = (ev.clientX - r.left) / r.width * 300; return clamp((x - 40) / 240 * 0.7, 0, VOC); };
+  let dragging = false;
+  svg.addEventListener("pointerdown", (ev) => { if (player.t < segStart[2] + segLen(2) * 0.5) return; dragging = true; svg.setPointerCapture(ev.pointerId); player.seek(tOfV(toV(ev))); });
+  svg.addEventListener("pointermove", (ev) => { if (dragging) player.seek(tOfV(toV(ev))); });
+  svg.addEventListener("pointerup", () => (dragging = false));
+})();
+</script>
+</body>
+</html>

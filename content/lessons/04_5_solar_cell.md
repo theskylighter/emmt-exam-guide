@@ -29,6 +29,10 @@ The depletion region is a permanent slope. Light keeps dropping marbles of two c
 
 <<SVG:solar_cell_construction>>
 
+**Watch it happen.** A photon makes an electron-hole pair, the junction field separates it, and electrons flow round the load. The last steps lead into the J-V curve.
+
+<<ANIM:solar_cell>>
+
 | Layer (top to bottom) | What it is | Why it is there |
 |---|---|---|
 | **Front metal grid** | thin metal fingers and busbars; the **negative** terminal | collects electrons while leaving most of the surface open to light |

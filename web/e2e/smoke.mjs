@@ -402,11 +402,49 @@ async function phone(browser) {
   await ctx.close();
 }
 
+// Animated explainers (<<ANIM:name>> iframes): each one loads, steps through every step, sizes its
+// iframe to the content, and fits a phone screen. Skipped when the course has none.
+async function animations(browser) {
+  const seen = new Map();
+  for (const l of lessons) for (const m of l.html.matchAll(/<iframe src="\/anim\/(\w+)\.html"/g)) if (!seen.has(m[1])) seen.set(m[1], l.slug);
+  if (!seen.size) { results.push({ s: "SKIP", text: "animations: none in this course" }); return; }
+  for (const [name, slug] of seen) {
+    for (const vp of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
+      const ctx = await browser.newContext({ viewport: vp });
+      const page = await ctx.newPage();
+      const errors = [];
+      page.on("pageerror", (e) => errors.push(e.message));
+      page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+      await page.goto(`${BASE}/${slug}`, { waitUntil: "networkidle" });
+      const frameEl = page.locator(`iframe[src="/anim/${name}.html"]`).first();
+      await frameEl.scrollIntoViewIfNeeded();
+      const f = page.frameLocator(`iframe[src="/anim/${name}.html"]`).first();
+      await f.locator("[data-a=next]").waitFor({ timeout: 10000 });
+      const label = async () => (await f.locator(".caption .n").textContent()).trim();
+      const total = +((await label()).match(/of (\d+)/) || [0, 0])[1];
+      let ok = total >= 2, steps = [await label()];
+      for (let s = 2; s <= total; s++) { await f.locator("[data-a=next]").click(); steps.push(await label()); }
+      ok = ok && steps.every((t, k) => t === `Step ${k + 1} of ${total}`);
+      await f.locator("[data-a=back]").click();
+      ok = ok && (await label()) === `Step ${total - 1} of ${total}`;
+      const caption = (await f.locator(".caption .c").textContent()).trim();
+      const box = await frameEl.evaluate((e) => Math.round(e.getBoundingClientRect().height));
+      const fit = await f.locator("body").evaluate((b) => b.ownerDocument.documentElement.scrollWidth - b.ownerDocument.documentElement.clientWidth);
+      const tag = vp.width < 500 ? "phone" : "desktop";
+      check(`animation ${name} (${tag}): steps 1-${total}, Back works, captioned, iframe sized (${box}px), fits width, no errors`,
+        ok && caption.length > 20 && box > 300 && fit <= 1 && errors.length === 0,
+        JSON.stringify({ steps: steps.slice(-2), box, fit, errors: errors.slice(0, 2) }));
+      await ctx.close();
+    }
+  }
+}
+
 try {
   if (!BASE) await startServer();
   const browser = await chromium.launch({ executablePath: findChrome(), headless: true });
   await desktop(browser);
   await phone(browser);
+  await animations(browser);
   await browser.close();
 } catch (e) {
   results.push({ s: "FAIL", text: `test run crashed: ${e.message}` });

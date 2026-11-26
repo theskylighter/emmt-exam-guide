@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation: the p-n-p junction transistor</title>
+<!--
+  p-n-p transistor after Callister Fig 12.23: structure, biasing, injection of holes into the thin base,
+  sweep into the collector (1 in 20 recombines, so alpha = 0.95), then amplification of a small input.
+  One progress value t drives the steps (player.js); the carrier stream and the signals use the ambient clock.
+-->
+<link rel="stylesheet" href="player.css">
+<style>
+  .wire { stroke: var(--muted); stroke-width: 2; fill: none; }
+  .bar { transition: width .1s; }
+  .wave { fill: none; stroke-width: 2.5; stroke-linejoin: round; }
+  .ring { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+</style>
+<script src="player.js"></script>
+</head>
+<body>
+<div id="root">
+  <figure role="group" aria-label="Animated p-n-p junction transistor amplifying a small signal">
+    <div class="panels">
+      <div class="panel wide">
+        <h3>Inside the transistor (p-n-p)</h3>
+        <svg id="dev" viewBox="0 0 460 300" role="img" aria-label="Emitter, thin base and collector with holes flowing through">
+          <!-- emitter tinted twice: heavily doped -->
+          <rect x="30" y="60" width="160" height="110" fill="var(--p-tint)"></rect>
+          <rect x="30" y="60" width="160" height="110" fill="var(--p-tint)"></rect>
+          <rect x="190" y="60" width="40" height="110" fill="var(--n-tint)"></rect>
+          <rect x="230" y="60" width="200" height="110" fill="var(--p-tint)"></rect>
+          <rect id="dep1" y="60" height="110" fill="var(--dep)"></rect>
+          <rect id="dep2" y="60" height="110" fill="var(--dep)"></rect>
+          <rect x="30" y="60" width="400" height="110" fill="none" stroke="var(--line)"></rect>
+          <text x="110" y="34" text-anchor="middle" class="lbl">Emitter</text>
+          <text x="110" y="50" text-anchor="middle" class="small">p, heavily doped</text>
+          <text x="210" y="34" text-anchor="middle" class="lbl">Base</text>
+          <text x="210" y="50" text-anchor="middle" class="small">n, very thin</text>
+          <text x="330" y="34" text-anchor="middle" class="lbl">Collector</text>
+          <text x="330" y="50" text-anchor="middle" class="small">p</text>
+          <text id="j1" x="190" y="186" text-anchor="middle" class="small fade">J1 forward</text>
+          <text id="j2" x="252" y="200" text-anchor="middle" class="small fade">J2 reverse</text>
+          <g id="carriers"></g>
+          <g id="stream"></g>
+          <g id="circuit" class="fade">
+            <path class="wire" d="M30,115 H14 V272 H56 M104,272 H122 M138,272 H210 V170"></path>
+            <circle cx="80" cy="272" r="13" fill="var(--panel)" stroke="var(--fg)" stroke-width="1.6"></circle>
+            <path d="M71,272 q4.5,-8 9,0 t9,0" fill="none" stroke="var(--fg)" stroke-width="1.6"></path>
+            <line x1="122" y1="260" x2="122" y2="284" stroke="var(--fg)" stroke-width="2"></line>
+            <line x1="138" y1="265" x2="138" y2="279" stroke="var(--fg)" stroke-width="5"></line>
+            <text x="116" y="256" class="small">+</text>
+            <text x="80" y="298" text-anchor="middle" class="small">input</text>
+            <path class="wire" d="M430,115 H446 V200 l-8,5 16,10 -16,10 16,10 -16,10 8,5 V272 H330 M314,272 H210"></path>
+            <!-- reverse bias on J2: + plate faces the base, - plate faces the collector (p-n-p) -->
+            <line x1="314" y1="260" x2="314" y2="284" stroke="var(--fg)" stroke-width="2"></line>
+            <line x1="330" y1="265" x2="330" y2="279" stroke="var(--fg)" stroke-width="5"></line>
+            <text x="300" y="256" class="small">+</text>
+            <text x="440" y="292" text-anchor="end" class="small">load R: output</text>
+          </g>
+        </svg>
+      </div>
+      <div class="panel">
+        <h3>Currents and signals</h3>
+        <svg id="sig" viewBox="0 0 300 300" role="img" aria-label="Emitter, base and collector currents, and the input and output signals">
+          <text id="wait" x="150" y="150" text-anchor="middle" class="small fade">currents appear once holes reach the collector</text>
+          <g id="bars" class="fade">
+            <text x="14" y="40" class="lbl">I<tspan font-size="10" dy="3">E</tspan></text>
+            <text x="14" y="70" class="lbl">I<tspan font-size="10" dy="3">C</tspan></text>
+            <text x="14" y="100" class="lbl">I<tspan font-size="10" dy="3">B</tspan></text>
+            <rect id="bE" class="bar" x="44" y="28" height="16" rx="3" fill="var(--minus)"></rect>
+            <rect id="bC" class="bar" x="44" y="58" height="16" rx="3" fill="var(--minus)"></rect>
+            <rect id="bB" class="bar" x="44" y="88" height="16" rx="3" fill="var(--plus)"></rect>
+            <text x="150" y="128" text-anchor="middle" class="small">I<tspan font-size="9" dy="3">E</tspan><tspan dy="-3"> = I</tspan><tspan font-size="9" dy="3">B</tspan><tspan dy="-3"> + I</tspan><tspan font-size="9" dy="3">C</tspan><tspan dy="-3">, and I</tspan><tspan font-size="9" dy="3">C</tspan><tspan dy="-3"> is about 0.95 I</tspan><tspan font-size="9" dy="3">E</tspan></text>
+          </g>
+          <g id="waves" class="fade">
+            <text x="14" y="160" class="small">input (about 0.1 mV)</text>
+            <polyline id="wIn" class="wave" stroke="var(--plus)"></polyline>
+            <text x="14" y="214" class="small">output across load (about 10 mV)</text>
+            <polyline id="wOut" class="wave" stroke="var(--minus)"></polyline>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <figcaption class="visually-hidden">
+      A p-n-p transistor: emitter p heavily doped, base n very thin, collector p. The emitter-base junction is forward
+      biased and injects holes into the base; most cross the thin base into the reverse-biased collector, a few recombine
+      and form the base current. A small input voltage change controls a large collector current, giving a large output
+      voltage across the load: amplification.
+    </figcaption>
+  </figure>
+</div>
+<script>
+(() => {
+  const { el, clamp, lerp, ease } = Explainer;
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- timeline: bias, inject, sweep, amplify ----------
+  const SEG = [1, 1, 1.2, 1.4];
+  const TOTAL = SEG.reduce((a, b) => a + b, 0);
+  const segStart = []; { let a = 0; for (const w of SEG) { segStart.push(a / TOTAL); a += w; } }
+  // At an exact stop, show the END of the step before it (the state its caption describes).
+  const locate = (t) => { let i = SEG.length - 1; while (i > 0 && t <= segStart[i] + 1e-9) i--; return { i, q: clamp((t - segStart[i]) / (SEG[i] / TOTAL)) }; };
+  const STOPS = [0, segStart[1], segStart[2], segStart[3], 1];
+  const CAP = [
+    "<b>Structure</b>: two p-n junctions back to back. <b>Emitter</b> (p, heavily doped), <b>base</b> (n, very thin and lightly doped), <b>collector</b> (p).",
+    "<b>Biasing</b>: junction J1 (emitter-base) is <b>forward</b> biased, so its depletion region is narrow. Junction J2 (base-collector) is <b>reverse</b> biased, so its depletion region is wide and its field will pull holes into the collector.",
+    "<b>Injection</b>: forward bias on J1 pushes <b>large numbers of holes</b> from the emitter into the base. In the n-type base they are <b>minority carriers</b>.",
+    "Because the base is <b>very thin</b>, <b>most holes sweep straight through</b> into the collector, pulled across J2. Only a <b>few recombine</b> with base electrons; they make the small <b>base current</b>. So I<sub>E</sub> = I<sub>B</sub> + I<sub>C</sub>, with I<sub>C</sub> about 0.95 to 0.99 of I<sub>E</sub>.",
+    "<b>Amplification</b>: a small change in the input voltage changes how many holes are injected, so the collector current swings a lot. Through the load resistor this gives a <b>large output voltage</b>: about <b>0.1 mV in, 10 mV out</b> (gain about 100).",
+  ];
+
+  // ---------- static carriers ----------
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const hole = (x, y, parent) => el("circle", { cx: x, cy: y, r: 4.6, class: "hole" }, parent);
+  const elec = (x, y, parent) => el("circle", { cx: x, cy: y, r: 3.8, class: "electron" }, parent);
+  for (let j = 0; j < 26; j++) hole(38 + rnd() * 140, 68 + rnd() * 94, $("carriers"));   // heavy doping: many holes
+  for (let j = 0; j < 4; j++) elec(200 + rnd() * 20, 72 + j * 26, $("carriers"));       // light doping: few electrons
+  for (let j = 0; j < 12; j++) hole(262 + rnd() * 160, 68 + rnd() * 94, $("carriers"));
+
+  // ---------- injected hole stream: 20 holes, one of which recombines in the base (alpha = 0.95) ----------
+  const N = 20, RATE = 0.32, REC = 7, XS = 60, XE = 422, XR = 212;
+  const stream = Array.from({ length: N }, (_, k) => ({ ph: k / N, y: 70 + ((k * 53) % 90),
+    h: el("circle", { r: 4.6, class: "hole moving" }, $("stream")), e: k === REC ? elec(0, 0, $("stream")) : null,
+    ring: k === REC ? el("circle", { r: 0, class: "ring" }, $("stream")) : null }));
+  const hash = (k, c) => { const x = Math.sin(k * 127.1 + c * 311.7) * 43758.5453; return x - Math.floor(x); };
+  let signalOn = false;
+  const density = (clock) => signalOn ? 0.6 + 0.36 * Math.sin(2 * Math.PI * 0.35 * clock) : 0.85;
+
+  function render(t, { clock }) {
+    const { i, q } = locate(t);
+    // depletion widths: unbiased -> J1 narrow (forward), J2 wide (reverse)
+    const b = i === 0 ? ease(q) : 1;
+    const w1 = lerp(7, 3, b), w2l = lerp(7, 9, b), w2r = lerp(7, 26, b);
+    $("dep1").setAttribute("x", 190 - w1); $("dep1").setAttribute("width", 2 * w1);
+    $("dep2").setAttribute("x", 230 - w2l); $("dep2").setAttribute("width", w2l + w2r);
+    $("circuit").style.opacity = b; $("j1").style.opacity = b; $("j2").style.opacity = b;
+
+    // how far the stream reaches: into the base while injecting, then on into the collector
+    const reach = i < 1 ? 0 : i === 1 ? lerp(XS, XR + 4, ease(q)) : i === 2 ? lerp(XR + 4, XE, ease(clamp(q / 0.8))) : XE;
+    signalOn = i === 3;
+    stream.forEach((s, k) => {
+      const pos = clock * RATE + s.ph, p = pos % 1, cycle = Math.floor(pos);
+      const spawnClock = clock - p / RATE;
+      const on = reach > XS && hash(k, cycle) < density(spawnClock);
+      let x = lerp(XS, XE, p), op = on ? 1 : 0;
+      if (k === REC) {                                   // this one recombines in the base
+        const pr = (XR - XS) / (XE - XS);
+        op = on && p < pr ? 1 : 0; x = Math.min(x, XR);
+        const meet = clamp((p - (pr - 0.08)) / 0.08);      // a base electron comes up to meet it
+        s.e.setAttribute("cx", 210); s.e.setAttribute("cy", lerp(176, s.y, meet)); s.e.style.opacity = on && i >= 2 && meet > 0 && p < pr ? 1 : 0;
+        const r = (p - pr) / 0.06;
+        s.ring.setAttribute("cx", XR); s.ring.setAttribute("cy", s.y);
+        s.ring.setAttribute("r", r > 0 && r < 1 ? 4 + 9 * r : 0); s.ring.style.opacity = on && i >= 2 && r > 0 && r < 1 ? 1 - r : 0;
+        if (i < 2) op = on && x < reach ? 1 : 0;
+      }
+      if (x > reach) op = 0; else if (x > reach - 14 && reach < XE) op *= (reach - x) / 14;
+      s.h.setAttribute("cx", x); s.h.setAttribute("cy", s.y); s.h.style.opacity = op;
+    });
+
+    // currents (shown once collection is understood) and signals (amplification step)
+    const showBars = i >= 2 ? (i === 2 ? clamp((q - 0.5) / 0.3) : 1) : 0;
+    $("bars").style.opacity = showBars;
+    $("wait").style.opacity = showBars > 0 ? 0 : 1;
+    const IE = 200 * (signalOn ? density(clock) / 0.96 : 0.85);
+    $("bE").setAttribute("width", IE); $("bC").setAttribute("width", IE * 0.95); $("bB").setAttribute("width", Math.max(2, IE * 0.05));
+    $("waves").style.opacity = signalOn ? clamp(q / 0.25) : 0;
+    const wave = (cy, amp) => { const pts = []; for (let x = 14; x <= 288; x += 4) pts.push(`${x},${(cy - amp * Math.sin(2 * Math.PI * (0.35 * clock - (x - 14) / 140))).toFixed(1)}`); return pts.join(" "); };
+    $("wIn").setAttribute("points", wave(182, 4));
+    $("wOut").setAttribute("points", wave(256, 28));
+  }
+
+  Explainer({ stops: STOPS, captions: CAP, render, ambient: (t) => t >= segStart[1] - 1e-6 });
+})();
+</script>
+</body>
+</html>

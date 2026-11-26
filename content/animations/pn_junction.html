@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animation: the p-n junction diode</title>
+<!--
+  Formation of the depletion region, then forward bias, reverse bias and breakdown, with the
+  operating point moving on the I-V characteristic. One progress value t drives the scene
+  (see player.js). The depletion half-width follows w ~ sqrt(V0 - V), as in a real junction.
+-->
+<link rel="stylesheet" href="player.css">
+<style>
+  .edge { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+  .ion rect { stroke-width: 1.3; fill: var(--bg); }
+  .ion.acc rect { stroke: var(--minus); }
+  .ion.don rect { stroke: var(--plus); }
+  .ion text { font-size: 11px; font-weight: 700; text-anchor: middle; }
+  .wire { stroke: var(--muted); stroke-width: 2; fill: none; }
+  .curve { fill: none; stroke: var(--plus); stroke-width: 2.5; }
+  .ring { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+</style>
+<script src="player.js"></script>
+</head>
+<body>
+<div id="root">
+  <figure role="group" aria-label="Animated p-n junction: formation, forward bias, reverse bias and breakdown">
+    <div class="panels">
+      <div class="panel wide">
+        <h3>Inside the crystal</h3>
+        <svg id="xtal" viewBox="0 0 460 300" role="img" aria-label="p-type and n-type silicon with the depletion region between them">
+          <rect x="30" y="70" width="200" height="120" fill="var(--p-tint)"></rect>
+          <rect x="230" y="70" width="200" height="120" fill="var(--n-tint)"></rect>
+          <rect id="dep" y="70" height="120" fill="var(--dep)"></rect>
+          <line id="edgeL" class="edge" y1="70" y2="190"></line>
+          <line id="edgeR" class="edge" y1="70" y2="190"></line>
+          <rect x="30" y="70" width="400" height="120" fill="none" stroke="var(--line)"></rect>
+          <text x="34" y="62" class="lbl" fill="var(--minus)">p-type (holes)</text>
+          <text x="426" y="62" class="lbl" text-anchor="end">n-type (electrons)</text>
+          <g id="ions"></g>
+          <g id="carriers"></g>
+          <g id="stream"></g>
+          <g id="field" class="fade">
+            <line id="fieldLine" y1="40" y2="40" stroke="var(--fg)" stroke-width="2"></line>
+            <polygon id="fieldHead" fill="var(--fg)"></polygon>
+            <text x="230" y="28" text-anchor="middle" class="small">built-in field E (n to p), barrier V0 ~ 0.7 V</text>
+          </g>
+          <text id="depLabel" x="230" y="206" text-anchor="middle" class="small fade">depletion region</text>
+          <g id="circuit" class="fade">
+            <path id="wireL" class="wire" d="M30,130 H14 V262 H220"></path>
+            <path id="wireR" class="wire" d="M240,262 H446 V130 H430"></path>
+            <line id="plateL" x1="222" x2="222" stroke="var(--fg)"></line>
+            <line id="plateR" x1="238" x2="238" stroke="var(--fg)"></line>
+            <text id="signL" x="208" y="250" text-anchor="middle" class="lbl"></text>
+            <text id="signR" x="252" y="250" text-anchor="middle" class="lbl"></text>
+            <text id="vText" x="230" y="296" text-anchor="middle" class="small"></text>
+          </g>
+        </svg>
+      </div>
+      <div class="panel">
+        <h3>I-V characteristic</h3>
+        <svg id="iv" viewBox="0 0 300 300" role="img" aria-label="Diode current against voltage">
+          <line class="axis" x1="14" y1="170" x2="292" y2="170"></line>
+          <line class="axis" x1="170" y1="282" x2="170" y2="14"></line>
+          <text x="290" y="162" class="lbl" text-anchor="end">V</text>
+          <text x="178" y="22" class="lbl">I</text>
+          <line id="kneeGuide" class="edge"></line>
+          <text id="kneeText" class="small" text-anchor="middle"></text>
+          <path id="curve" class="curve"></path>
+          <g id="ivLabels"></g>
+          <circle id="dot" class="dot" r="7"></circle>
+        </svg>
+      </div>
+    </div>
+    <figcaption class="visually-hidden">
+      Holes and electrons diffuse across the junction and recombine, leaving fixed acceptor and donor ions
+      that form the depletion region and a built-in field from n to p. Forward bias narrows the region and a
+      large current flows; reverse bias widens it and only a tiny saturation current flows; a large reverse
+      voltage causes breakdown.
+    </figcaption>
+  </figure>
+</div>
+<script>
+(() => {
+  const { el, css, clamp, lerp, ease } = Explainer;
+  const $ = (id) => document.getElementById(id);
+  const X0 = 230, W0 = 40, V0 = 0.75;
+  const width = (V) => W0 * Math.sqrt(Math.max(0, V0 - V) / V0);   // depletion half-width
+
+  // ---------- diode law (display units: I = 1 at V = 0.70 V; reverse current exaggerated so it is visible) ----------
+  const A = Math.exp(-0.7 / 0.045);
+  const I = (V) => V >= 0 ? A * (Math.exp(V / 0.045) - 1)
+    : -0.05 * (1 - Math.exp(V / 0.04)) - (V < -0.82 ? 0.05 * (Math.exp((-0.82 - V) / 0.025) - 1) : 0);
+  const PX = (V) => 170 + V * 150, PY = (i) => 170 - i * 125;
+
+  // ---------- timeline ----------
+  const VF = 0.71, VR = -0.8, VB = -0.89;
+  const SEG = [
+    { w: 2,   V: () => 0 },                        // formation
+    { w: 1.5, V: (q) => lerp(0, VF, q) },          // forward bias
+    { w: 1.5, V: (q) => lerp(VF, VR, q) },         // through zero into reverse bias
+    { w: 1,   V: (q) => lerp(VR, VB, q) },         // breakdown
+  ];
+  const TOTAL = SEG.reduce((s, g) => s + g.w, 0);
+  const segStart = []; { let a = 0; for (const g of SEG) { segStart.push(a / TOTAL); a += g.w; } }
+  // At an exact stop, show the END of the step before it (the state its caption describes).
+  const locate = (t) => { let i = SEG.length - 1; while (i > 0 && t <= segStart[i] + 1e-9) i--; return { i, q: clamp((t - segStart[i]) / (SEG[i].w / TOTAL)) }; };
+  const STOPS = [0, 0.5 * segStart[1], segStart[1], segStart[2], segStart[3], 1];
+  const CAP = [
+    "One single crystal, doped two ways: the <b>p-side</b> has mobile <b>holes</b> (open circles), the <b>n-side</b> has mobile <b>electrons</b> (dots).",
+    "Each side is crowded with its own carrier, so electrons <b>diffuse</b> from n to p and holes from p to n. They meet near the junction and <b>recombine</b>.",
+    "Each carrier that left exposes a <b>fixed ion</b>: + donors on the n-side, − acceptors on the p-side. This <b>depletion region</b> has no mobile carriers, and its <b>built-in field (n to p)</b> stops further diffusion: a barrier of about <b>0.7 V for Si</b>.",
+    "<b>Forward bias</b> (p to +, n to −): the barrier is lowered and the depletion region narrows. Holes and electrons are pushed into the junction and recombine, so a <b>large current</b> flows, rising <b>exponentially</b> beyond about 0.7 V.",
+    "<b>Reverse bias</b> (p to −, n to +): carriers are pulled <b>away</b> from the junction, so the depletion region <b>widens</b> and becomes insulating. Only a <b>tiny saturation current</b> flows. This one-way behaviour is what makes a rectifier.",
+    "<b>Breakdown</b>: at a large reverse voltage, large numbers of carriers are suddenly generated and the reverse current rises abruptly (Zener diodes are designed to work here).",
+  ];
+
+  // ---------- static parts ----------
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const ions = [];
+  for (let k = 0; k < 5; k++) for (const y of [88, 116, 144, 172]) for (const side of [-1, 1]) {
+    const d = 6 + 12 * k, g = el("g", { class: "ion " + (side < 0 ? "acc" : "don") }, $("ions"));
+    el("rect", { x: X0 + side * d - 4.5, y: y - 4.5, width: 9, height: 9 }, g);
+    const tx = el("text", { x: X0 + side * d, y: y + 3.6 }, g); tx.textContent = side < 0 ? "−" : "+";
+    ions.push({ g, d });
+  }
+  const mk = (kind) => kind === "h" ? el("circle", { r: 5, class: "hole" }, $("carriers")) : el("circle", { r: 4.2, class: "electron" }, $("carriers"));
+  const holes = [], elecs = [];
+  for (let j = 0; j < 22; j++) { holes.push({ f: rnd(), y: 80 + rnd() * 100, n: mk("h") }); elecs.push({ f: rnd(), y: 80 + rnd() * 100, n: mk("e") }); }
+  // carriers that cross during formation (one hole and one electron per pair)
+  const pairs = Array.from({ length: 7 }, (_, k) => ({ start: k / 7 * 0.62, y1: 86 + rnd() * 90, y2: 86 + rnd() * 90,
+    h: el("circle", { r: 5, class: "hole" }, $("carriers")), e: el("circle", { r: 4.2, class: "electron" }, $("carriers")),
+    ring: el("circle", { r: 0, class: "ring" }, $("carriers")) }));
+  // forward-bias stream (moves with ambient clock)
+  const stream = Array.from({ length: 10 }, (_, k) => ({ ph: k / 10, y: 82 + ((k * 37) % 96),
+    h: el("circle", { r: 5, class: "hole moving" }, $("stream")), e: el("circle", { r: 4.2, class: "electron" }, $("stream")) }));
+  // electrons in the external wires: out of the p-side into the + terminal, from the - terminal into the n-side
+  const wireL = $("wireL"), wireR = $("wireR");
+  const wireDots = Array.from({ length: 12 }, (_, k) => ({ ph: (k % 6) / 6, w: k < 6 ? wireL : wireR, n: el("circle", { r: 3.4, class: "electron" }, $("circuit")) }));
+
+  // I-V curve and its labels
+  const pts = []; for (let V = VB; V <= VF + 1e-9; V += 0.0025) pts.push(`${PX(V).toFixed(1)},${PY(I(V)).toFixed(1)}`);
+  $("curve").setAttribute("d", "M" + pts.join(" L"));
+  $("kneeGuide").setAttribute("x1", PX(0.7)); $("kneeGuide").setAttribute("x2", PX(0.7));
+  $("kneeGuide").setAttribute("y1", 170); $("kneeGuide").setAttribute("y2", PY(1));
+  $("kneeText").setAttribute("x", PX(0.7)); $("kneeText").setAttribute("y", 186); $("kneeText").textContent = "~0.7 V";
+  const LBL = [
+    { t: segStart[2], x: 160, y: 60, text: "forward: large current", anchor: "end" },
+    { t: segStart[3], x: 30, y: 158, text: "reverse: tiny current", anchor: "start" },
+    { t: 1, x: 40, y: 258, text: "breakdown", anchor: "start" },
+  ].map((l) => { const tx = el("text", { x: l.x, y: l.y, class: "small fade", "text-anchor": l.anchor }, $("ivLabels")); tx.textContent = l.text; return { ...l, tx }; });
+
+  // ---------- one frame ----------
+  function render(t, { clock }) {
+    const { i, q } = locate(t);
+    const V = SEG[i].V(q);
+    const formQ = i === 0 ? q : 1;
+    const w = i === 0 ? W0 * ease(clamp(q / 0.85)) : width(V);
+
+    $("dep").setAttribute("x", X0 - w); $("dep").setAttribute("width", 2 * w);
+    for (const id of ["edgeL", "edgeR"]) { const x = X0 + (id === "edgeL" ? -w : w); $(id).setAttribute("x1", x); $(id).setAttribute("x2", x); $(id).style.opacity = w > 3 ? 1 : 0; }
+    ions.forEach((o) => (o.g.style.opacity = clamp((w - o.d) / 4)));
+    holes.forEach((c) => { c.n.setAttribute("cx", 38 + c.f * (X0 - w - 48)); c.n.setAttribute("cy", c.y); });
+    elecs.forEach((c) => { c.n.setAttribute("cx", X0 + w + 10 + c.f * (422 - (X0 + w + 10))); c.n.setAttribute("cy", c.y); });
+
+    // formation: pairs cross the junction and recombine
+    pairs.forEach((p) => {
+      const k = i === 0 ? (formQ - p.start) / 0.2 : 2;
+      const live = k > 0 && k < 1, m = ease(clamp(k));
+      p.h.style.opacity = live ? 1 : 0; p.e.style.opacity = live ? 1 : 0;
+      p.h.setAttribute("cx", lerp(X0 - 34, X0 + 6, m)); p.h.setAttribute("cy", lerp(p.y1, (p.y1 + p.y2) / 2, m));
+      p.e.setAttribute("cx", lerp(X0 + 34, X0 - 6, m)); p.e.setAttribute("cy", lerp(p.y2, (p.y1 + p.y2) / 2, m));
+      const r = k >= 1 && k < 1.4 ? (k - 1) / 0.4 : -1;                 // recombination flash
+      p.ring.setAttribute("cx", X0); p.ring.setAttribute("cy", (p.y1 + p.y2) / 2);
+      p.ring.setAttribute("r", r >= 0 ? 4 + r * 10 : 0); p.ring.style.opacity = r >= 0 ? 1 - r : 0;
+    });
+
+    // forward current: carriers stream into the junction and vanish there
+    const cur = I(V), flow = V > 0.3 ? clamp(cur * 1.4) : 0;
+    stream.forEach((s) => {
+      const p = (clock * 0.45 + s.ph) % 1;
+      const xh = lerp(36, X0 - 2, p), xe = lerp(424, X0 + 2, p), op = flow * (p > 0.85 ? (1 - p) / 0.15 : 1);
+      s.h.setAttribute("cx", xh); s.h.setAttribute("cy", s.y); s.h.style.opacity = op;
+      s.e.setAttribute("cx", xe); s.e.setAttribute("cy", 190 - (s.y - 70)); s.e.style.opacity = op;
+    });
+
+    wireDots.forEach((d) => { const pt = d.w.getPointAtLength(((clock * 0.5 + d.ph) % 1) * d.w.getTotalLength());
+      d.n.setAttribute("cx", pt.x); d.n.setAttribute("cy", pt.y); d.n.style.opacity = flow; });
+
+    // built-in field arrow (n to p) over the depletion region
+    const showField = formQ > 0.8 && w > 12;
+    $("field").style.opacity = showField ? 1 : 0;
+    $("fieldLine").setAttribute("x1", X0 + w - 2); $("fieldLine").setAttribute("x2", X0 - w + 8);
+    $("fieldHead").setAttribute("points", `${X0 - w},40 ${X0 - w + 10},34 ${X0 - w + 10},46`);
+    $("depLabel").style.opacity = formQ > 0.8 ? 1 : 0;
+
+    // battery: the long plate is +. Forward = p side (left) to +.
+    $("circuit").style.opacity = i === 0 ? 0 : 1;
+    const fwd = V >= 0, off = Math.abs(V) < 0.02;
+    const long = { y1: 244, y2: 280, "stroke-width": 2 }, short = { y1: 252, y2: 272, "stroke-width": 5 };
+    for (const [id, a] of [["plateL", fwd ? long : short], ["plateR", fwd ? short : long]]) for (const k in a) $(id).setAttribute(k, a[k]);
+    $("signL").textContent = off ? "" : fwd ? "+" : "−"; $("signR").textContent = off ? "" : fwd ? "−" : "+";
+    $("vText").textContent = off ? "V = 0" : (fwd ? `forward bias, V = +${V.toFixed(2)} V` : `reverse bias, V = ${V.toFixed(2)} V (scaled)`);
+
+    // I-V
+    $("dot").setAttribute("cx", PX(V)); $("dot").setAttribute("cy", PY(cur));
+    LBL.forEach((l) => (l.tx.style.opacity = t >= l.t - 1e-6 ? 1 : 0));
+  }
+
+  Explainer({ stops: STOPS, captions: CAP, render, ambient: (t) => { const { i, q } = locate(t); return SEG[i].V(q) > 0.3; } });
+})();
+</script>
+</body>
+</html>

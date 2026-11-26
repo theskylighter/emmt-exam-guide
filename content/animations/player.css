@@ -1,0 +1,46 @@
+/* Shared look for every animated explainer (content/animations/*.html, served at /anim/). */
+:root {
+  --bg: #ffffff; --panel: #f7f7f9; --fg: #18181b; --muted: #63636b; --line: #e4e4e7;
+  --plus: #2563eb; --minus: #ea580c; --ghost: #c4c4cc; --soft: rgba(37, 99, 235, .10);
+  --p-tint: rgba(234, 88, 12, .10); --n-tint: rgba(37, 99, 235, .10); --dep: rgba(120, 120, 135, .16);
+  --sun: #d97706; --metal: #52525b;
+}
+html.dark {
+  --bg: #0f1013; --panel: #17181d; --fg: #ececef; --muted: #a1a1aa; --line: #27272d;
+  --plus: #7aa2ff; --minus: #fb923c; --ghost: #45454d; --soft: rgba(122, 162, 255, .12);
+  --p-tint: rgba(251, 146, 60, .12); --n-tint: rgba(122, 162, 255, .13); --dep: rgba(200, 200, 215, .10);
+  --sun: #fbbf24; --metal: #a1a1aa;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+#root { padding: 14px; }
+.panels { display: flex; flex-wrap: wrap; gap: 12px; }
+.panel { flex: 1 1 300px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 6px; }
+.panel.wide { flex: 1.6 1 340px; }
+.panel h3 { font-size: 13px; font-weight: 600; color: var(--muted); padding: 4px 6px 0; letter-spacing: .02em; }
+svg { display: block; width: 100%; height: auto; }
+svg text { fill: var(--fg); font-family: inherit; }
+.small { font-size: 12px; fill: var(--muted) !important; }
+.lbl { font-size: 13px; font-weight: 700; }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.ghost { fill: none; stroke: var(--ghost); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.trace { fill: none; stroke: var(--plus); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.dot { fill: var(--minus); stroke: var(--bg); stroke-width: 2; }
+.fade { transition: opacity .35s; }
+.arrow { stroke-width: 3; stroke-linecap: round; }
+.hole { fill: none; stroke: var(--minus); stroke-width: 1.8; }
+.electron { fill: var(--plus); }
+.hole.moving { fill: var(--minus); fill-opacity: .6; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.controls button {
+  font: inherit; font-size: 14px; color: var(--fg); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 12px; cursor: pointer; min-height: 36px;
+}
+.controls button:hover { border-color: var(--plus); }
+.controls button.primary { background: var(--plus); border-color: var(--plus); color: #fff; min-width: 76px; }
+html.dark .controls button.primary { color: #0f1013; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--plus); outline-offset: 2px; }
+.controls input[type=range] { flex: 1 1 160px; accent-color: var(--plus); min-height: 36px; }
+.caption { margin-top: 10px; padding: 10px 12px; border-left: 3px solid var(--plus); background: var(--panel); border-radius: 0 8px 8px 0; min-height: 66px; }
+.caption .n { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

@@ -32,6 +32,10 @@ Think of a water pump that must also push against a leak. $J_L$ is how much wate
 
 <<SVG:solar_cell_jv>>
 
+**Watch it happen.** Skip to step 4 (Next three times), then drag the dot along the curve: the shaded rectangle is the power, largest at the maximum power point.
+
+<<ANIM:solar_cell>>
+
 **Panel (a):** the blue **dark** curve is an ordinary diode. **Light shifts the whole curve down by $J_L$** (red). The part in the **fourth quadrant** (V > 0, J < 0) is where the cell delivers power.
 
 **Panel (b):** the same illuminated curve flipped into the first quadrant, with its key points:
